@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import crypto from 'crypto';
+import { PROJECT_URL } from '@/constants';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // Server-side environment variable
@@ -23,8 +24,7 @@ export async function POST(request: NextRequest) {
           Return JSON in this format: 
           {
             "name": "short name (max 3 words)",
-            "symbol": "ticker symbol (max 5 letters)",
-            "description": "brief description"
+            "symbol": "ticker symbol (max 5 letters)"
           }`
         },
         { role: "user", content: joke }
@@ -40,26 +40,20 @@ export async function POST(request: NextRequest) {
       parsedContent = {
         name: joke.split(' ').slice(0, 3).join(' ').substring(0, 20) || "Joke Coin",
         symbol: joke.split(' ')
-          .filter(w => w)
+          .filter((w: string) => w)
           .slice(0, 3)
-          .map(word => word[0])
+          .map((word: string) => word[0])
           .join('')
           .toUpperCase()
-          .substring(0, 5) || "JOKE",
-        description: joke.substring(0, 100)
+          .substring(0, 5) || "JOKE"
       };
     }
 
     // Generate unique ID
     const uniqueId = crypto.randomBytes(8).toString('hex');
     
-    // Get host info
-    const host = request.headers.get('host') || 'localhost:3000';
-    const protocol = host.includes('localhost') ? 'http' : 'https';
-    const baseUrl = `${protocol}://${host}`;
-    
-    // Create metadata URL
-    const metadataUrl = `${baseUrl}/api/coin-metadata/${uniqueId}`;
+    // Create metadata URL using PROJECT_URL
+    const metadataUrl = `${PROJECT_URL}/api/coin-metadata/${uniqueId}`;
     
     // Store metadata
     await fetch(metadataUrl, {
@@ -70,14 +64,13 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         name: parsedContent.name,
         symbol: parsedContent.symbol,
-        description: parsedContent.description || joke.substring(0, 100),
+        description: joke,
       }),
     });
     
     return NextResponse.json({
       name: parsedContent.name,
       symbol: parsedContent.symbol,
-      description: parsedContent.description,
       metadataUrl
     });
     

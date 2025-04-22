@@ -23,8 +23,11 @@ export type CreateCoinArgs = {
   name: string;
   symbol: string;
   uri: string;
-  payoutRecipient: Address;
+  payoutRecipient: `0x${string}`;
   initialPurchaseWei?: bigint;
+  onSuccess?: (hash: string) => void;
+  onError?: (error: Error) => void;
+  className?: string;
 };
 
 export function CoinButton({
@@ -32,16 +35,16 @@ export function CoinButton({
   symbol,
   uri,
   payoutRecipient,
-  initialPurchaseWei,
+  initialPurchaseWei = BigInt(0),
   onSuccess,
-  onError
-}: CreateCoinArgs & {
-  onSuccess?: (hash: string) => void;
-  onError?: (error: Error) => void;
-}) {
+  onError,
+  className
+}: CreateCoinArgs) {
   const account = useAccount();
   const [status, setStatus] = useState<string>('idle');
   const [contractParams, setContractParams] = useState<ContractParams | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const { writeContractAsync } = useWriteContract();
 
   // Create the contract call params
   useEffect(() => {
@@ -52,7 +55,7 @@ export function CoinButton({
           symbol,
           uri,
           payoutRecipient,
-          initialPurchaseWei: initialPurchaseWei || BigInt(10000000000000000), // 0.01 ETH
+          initialPurchaseWei: initialPurchaseWei || BigInt(0), // 0.01 ETH
           platformReferrer: "0x0000000000000000000000000000000000000000" as `0x${string}`,
         });
         
@@ -88,16 +91,19 @@ export function CoinButton({
   const { writeContract, data: hash, error: writeError } = useWriteContract();
 
   // Create the coin
-  const createCoin = () => {
-    if (simulateData && contractParams) {
-      setStatus('creating');
-      writeContract({
-        address: contractParams.address,
-        abi: contractParams.abi,
-        functionName: contractParams.functionName,
-        args: contractParams.args,
-        value: contractParams.value
-      });
+  const handleClick = async () => {
+    if (!contractParams) return;
+    
+    try {
+      setIsLoading(true);
+      const hash = await writeContractAsync(contractParams);
+      onSuccess?.(hash);
+      toast.success("Coin created successfully!");
+    } catch (error) {
+      onError?.(error as Error);
+      toast.error("Failed to create coin");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -138,25 +144,11 @@ export function CoinButton({
       </div>
       
       <Button 
-        onClick={createCoin}
-        disabled={!account.address || status === 'creating' || !simulateData || !contractParams}
-        variant="gradient"
-        size="xl"
-        className="w-full"
+        onClick={handleClick}
+        disabled={isLoading}
+        className={className}
       >
-        {status === 'creating' ? (
-          <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Creating your token...
-          </>
-        ) : !contractParams ? (
-          <>
-            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-            Preparing contract...
-          </>
-        ) : (
-          <>Deploy Your Coin</>
-        )}
+        {isLoading ? "Deploying..." : "Deploy Coin"}
       </Button>
       
       {simulateError && (

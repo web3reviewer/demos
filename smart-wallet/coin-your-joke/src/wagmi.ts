@@ -1,6 +1,6 @@
 import { http, cookieStorage, createConfig, createStorage } from "wagmi";
 import { base, baseSepolia } from "wagmi/chains";
-import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
+import { coinbaseWallet } from "wagmi/connectors";
 
 export const cbWalletConnector = coinbaseWallet({
   appName: "Smart Wallet Zora Coiner",

@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
             borderRadius: '15px',
           }}
         >
-          <div style={{ fontSize: 60, fontWeight: 'bold', marginBottom: 20 }}>JOKE COIN</div>
+          <div style={{ fontSize: 60, fontWeight: 'bold', marginBottom: 20 }}>This is a Coined Banger</div>
           <div style={{ 
             padding: '20px', 
             background: 'rgba(0,0,0,0.3)', 
