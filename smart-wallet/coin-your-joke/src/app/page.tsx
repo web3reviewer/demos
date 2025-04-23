@@ -35,8 +35,8 @@ function App() {
     setApiError(null);
   };
 
-  const handleError = (errorMessage: string) => {
-    setApiError(errorMessage);
+  const handleError = (error: Error) => {
+    setApiError(error.message);
     setCoinParams(null);
   };
 
@@ -90,9 +90,13 @@ function App() {
                 <>
                   <CoinDetails coinParams={coinParams} />
                   <CoinButton
-                    coinParams={coinParams}
+                    name={coinParams.name}
+                    symbol={coinParams.symbol}
+                    uri={coinParams.uri}
+                    payoutRecipient={coinParams.payoutRecipient}
+                    initialPurchaseWei={coinParams.initialPurchaseWei}
+                    onSuccess={handleTxHash}
                     onError={handleError}
-                    onTxHash={handleTxHash}
                   />
                 </>
               )}
