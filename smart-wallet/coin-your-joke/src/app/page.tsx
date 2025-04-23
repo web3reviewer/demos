@@ -1,13 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { CoinButton, CreateCoinArgs } from "@/components/CoinButton";
-import { Button } from "@/components/ui/button";
+import { Coins, CheckCircle, AlertCircle, ExternalLink, Copy } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Loader2, CheckCircle, AlertCircle, Wallet, Coins, Copy, ExternalLink } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { WalletConnect } from "@/components/WalletConnect";
+import { CoinDetails } from "@/components/CoinDetails";
+import { JokeInput } from "@/components/JokeInput";
+import { useAccount } from "wagmi";
+import { CreateCoinArgs } from "@/types";
+import { CoinButton } from "@/components/CoinButton";
+import Image from 'next/image';
 
 const emptyCoinArgs: CreateCoinArgs = {
   name: "name",
@@ -20,80 +25,22 @@ const emptyCoinArgs: CreateCoinArgs = {
 const MAX_JOKE_LENGTH = 400;
 
 function App() {
-  const account = useAccount();
-  const { connectors, connect, error } = useConnect();
-  const { disconnect } = useDisconnect();
+  const { status: accountStatus } = useAccount();
+  const [coinParams, setCoinParams] = useState<CreateCoinArgs | null>(null);
+  const [apiError, setApiError] = useState<string | null>(null);
+  const [txHash, setTxHash] = useState<string | null>(null);
 
-  const [joke, setJoke] = useState<string>('');
-  const [coinParams, setCoinParams] = useState<CreateCoinArgs>(emptyCoinArgs);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [apiError, setApiError] = useState<string>('');
-  const [success, setSuccess] = useState<boolean>(false);
-  const [txHash, setTxHash] = useState<string>('');
-
-  const handleJokeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    // Remove any newlines and limit length
-    const singleLineValue = value.replace(/\n/g, '');
-    if (singleLineValue.length <= MAX_JOKE_LENGTH) {
-      setJoke(singleLineValue);
-    }
+  const handleJokeGenerated = (params: CreateCoinArgs) => {
+    setCoinParams(params);
+    setApiError(null);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    // Prevent Enter key from creating new lines
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
+  const handleError = (errorMessage: string) => {
+    setApiError(errorMessage);
+    setCoinParams(null);
   };
 
-  // Generate coin parameters from joke
-  const generateCoinParams = async (jokeText: string) => {
-    if (!jokeText) return;
-    setLoading(true);
-    setApiError('');
-    
-    try {
-      const response = await fetch('/api/generate-coin', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ joke: jokeText }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to generate coin parameters');
-      }
-      
-      const data = await response.json();
-      
-      // Make sure the metadataUrl is absolute
-      let metadataUrl = data.metadataUrl;
-      if (metadataUrl.startsWith('/') && typeof window !== 'undefined') {
-        metadataUrl = window.location.origin + metadataUrl;
-      }
-      
-      setCoinParams({
-        name: data.name,
-        symbol: data.symbol,
-        uri: metadataUrl,
-        payoutRecipient: account.address || emptyCoinArgs.payoutRecipient,
-        initialPurchaseWei: BigInt(0) // Exactly 0.01 ETH
-      });
-      
-      toast.success("Generated coin parameters successfully!");
-      
-    } catch (e) {
-      setApiError(`Error: ${(e as Error).message}`);
-      toast.error(`Error: ${(e as Error).message}`);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSuccess = (hash: string) => {
-    setSuccess(true);
+  const handleTxHash = (hash: string) => {
     setTxHash(hash);
   };
 
@@ -106,173 +53,51 @@ function App() {
     return `https://basescan.org/tx/${hash}`;
   };
 
-  const formatAddress = (address: string | undefined) => {
-    if (!address) return "";
-    return `${address.substring(0, 6)}...${address.substring(address.length - 4)}`;
-  };
-
   return (
-    <div className="min-h-screen bg-white">
+    <main className="min-h-screen relative">
+      <Image
+        src="/hero-bg.svg"
+        alt="Background"
+        fill
+        className="object-cover -z-10"
+        priority
+      />
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Coins className="h-8 w-8 text-[#1453EE]" />
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#1453EE] to-[#1453EE]/80 bg-clip-text text-transparent">Coin Your Bangers</h1>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-[#1453EE] to-[#1453EE]/80 bg-clip-text text-transparent">
+              Coin Your Bangers
+            </h1>
           </div>
-          
-          <div className="flex items-center gap-3">
-            {account.status === "connected" ? (
-              <div className="flex items-center gap-2">
-                <div className="px-3 py-1.5 bg-white rounded-full flex items-center gap-2 border border-[#1453EE] shadow-sm">
-                  <div className="w-2 h-2 rounded-full bg-[#1453EE]"></div>
-                  <span className="text-xs font-medium text-[#1453EE]">{formatAddress(account.address)}</span>
-                  <Button 
-                    variant="ghost" 
-                    size="icon" 
-                    className="h-5 w-5 text-[#1453EE]" 
-                    onClick={() => account.address && copyToClipboard(account.address)}
-                  >
-                    <Copy className="h-3 w-3" />
-                  </Button>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => disconnect()}
-                  className="text-xs text-[#1453EE] border-[#1453EE] hover:bg-[#1453EE] hover:text-white"
-                >
-                  Disconnect
-                </Button>
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                {connectors.filter(connector => connector.name === 'Coinbase Wallet').map((connector) => (
-                  <Button
-                    key={connector.uid}
-                    onClick={() => connect({ connector })}
-                    variant="gradient"
-                    size="sm"
-                    className="flex items-center gap-1.5 bg-[#1453EE] hover:bg-[#1453EE]/90 text-white"
-                  >
-                    <Wallet className="h-4 w-4" />
-                    Sign In
-                  </Button>
-                ))}
-              </div>
-            )}
-          </div>
+          <WalletConnect />
         </div>
         
-        {error && (
+        {apiError && (
           <Alert variant="destructive" className="mb-6 slide-in-from-top animate-in">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error.message}</AlertDescription>
+            <AlertDescription>{apiError}</AlertDescription>
           </Alert>
         )}
 
         <div className="space-y-6">
-          {account.status === "connected" ? (
+          {accountStatus === "connected" ? (
             <>
-              <Card className="border-[#1453EE] shadow-sm hover-scale">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-xl text-[#1453EE]">Turn Your Banger into a Coin</CardTitle>
-                  <CardDescription className="text-[#1453EE]/80">
-                    Enter your joke and coin it! (Max {MAX_JOKE_LENGTH} characters)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <textarea
-                      value={joke}
-                      onChange={handleJokeChange}
-                      onKeyDown={handleKeyDown}
-                      placeholder="We can clone a wolf that's been dead for 13,000 years but we still have to approve the same token to swap it on each individual L2"
-                      className="w-full px-3 py-2 border border-[#1453EE] rounded-md focus:outline-none focus:ring-2 focus:ring-[#1453EE] min-h-[100px] resize-none"
-                      rows={1}
-                    />
-                    <div className="text-right text-sm text-[#1453EE]/80">
-                      {joke.length}/{MAX_JOKE_LENGTH} characters
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    onClick={() => generateCoinParams(joke)}
-                    disabled={!joke || loading}
-                    className="w-full bg-[#1453EE] hover:bg-[#1453EE]/90 text-white"
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Creating your coin...
-                      </>
-                    ) : 'Coin it!'}
-                  </Button>
-                </CardFooter>
-              </Card>
+              <JokeInput onJokeGenerated={handleJokeGenerated} />
 
-              {apiError && (
-                <Alert variant="destructive" className="border border-red-200 bg-red-50/50 slide-in-from-top animate-in">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>{apiError}</AlertDescription>
-                </Alert>
+              {coinParams && (
+                <>
+                  <CoinDetails coinParams={coinParams} />
+                  <CoinButton
+                    coinParams={coinParams}
+                    onError={handleError}
+                    onTxHash={handleTxHash}
+                  />
+                </>
               )}
 
-              {coinParams.name !== emptyCoinArgs.name && (
-                <Card className="border-[#1453EE] shadow-sm hover-scale">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-xl text-[#1453EE]">Your Coin Details</CardTitle>
-                    <CardDescription className="text-[#1453EE]/80">
-                      Review your coin details before minting
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid gap-4">
-                      <div className="flex items-center justify-center mb-2">
-                        <div className="w-20 h-20 rounded-full bg-gradient-to-r from-[#1453EE] to-[#1453EE]/80 flex items-center justify-center text-white text-2xl font-bold shadow-md">
-                          {coinParams.symbol}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="rounded-lg bg-white p-3">
-                          <p className="text-xs text-[#1453EE]/80 mb-1">Name</p>
-                          <p className="font-medium text-[#1453EE]">{coinParams.name}</p>
-                        </div>
-                        <div className="rounded-lg bg-white p-3">
-                          <p className="text-xs text-[#1453EE]/80 mb-1">Symbol</p>
-                          <p className="font-medium text-[#1453EE]">{coinParams.symbol}</p>
-                        </div>
-                      </div>
-                      <div className="rounded-lg bg-white p-3">
-                        <div className="flex justify-between items-center">
-                          <p className="text-xs text-[#1453EE]/80 mb-1">Metadata URI</p>
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            className="h-5 w-5 text-[#1453EE]" 
-                            onClick={() => copyToClipboard(coinParams.uri)}
-                          >
-                            <Copy className="h-3 w-3" />
-                          </Button>
-                        </div>
-                        <p className="text-sm text-[#1453EE]/80 truncate">{coinParams.uri}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                  <CardFooter>
-                    <CoinButton
-                      {...coinParams}
-                      onSuccess={handleSuccess}
-                      onError={(e) => setApiError(e.message)}
-                      className="w-full bg-[#1453EE] hover:bg-[#1453EE]/90 text-white"
-                    />
-                  </CardFooter>
-                </Card>
-              )}
-
-              {success && (
+              {txHash && (
                 <Card className="border-green-200 bg-green-50">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2 text-green-700">
@@ -309,10 +134,8 @@ function App() {
                       variant="outline"
                       className="w-full text-[#1453EE] border-[#1453EE] hover:bg-[#1453EE] hover:text-white"
                       onClick={() => {
-                        setJoke('');
-                        setCoinParams(emptyCoinArgs);
-                        setSuccess(false);
-                        setTxHash('');
+                        setCoinParams(null);
+                        setTxHash(null);
                       }}
                     >
                       Create Another Coin
@@ -330,25 +153,11 @@ function App() {
                 <br />
                 Connect your wallet to get started.
               </p>
-              <div className="flex gap-3">
-                {connectors.filter(connector => connector.name === 'Coinbase Wallet').map((connector) => (
-                  <Button
-                    key={connector.uid}
-                    onClick={() => connect({ connector })}
-                    variant="gradient"
-                    size="xl"
-                    className="flex items-center gap-2 bg-[#1453EE] hover:bg-[#1453EE]/90 text-white"
-                  >
-                    <Wallet className="h-5 w-5" />
-                    Sign In
-                  </Button>
-                ))}
-              </div>
             </div>
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
