@@ -32,10 +32,6 @@ export function CoinDetails({ coinParams }: CoinDetailsProps) {
             <h3 className="font-medium mb-1 text-[#1453EE]">Payout Recipient</h3>
             <p className="text-[#1453EE]/80 font-mono">{coinParams.payoutRecipient}</p>
           </div>
-          <div>
-            <h3 className="font-medium mb-1 text-[#1453EE]">Initial Purchase Price</h3>
-            <p className="text-[#1453EE]/80">{coinParams.initialPurchaseWei.toString()} wei</p>
-          </div>
         </div>
       </CardContent>
     </Card>
