@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { CoinButton, CreateCoinArgs } from "@/app/components/CoinButton";
+import { CoinButton, CreateCoinArgs } from "@/components/CoinButton";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
