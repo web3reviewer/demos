@@ -49,9 +49,10 @@ The main page (`page.tsx`) provides:
 - Copy .env.example, name it `.env` and set up your variables
 
    ```
-   NEXT_PUBLIC_URL=your_deployment_url
-   ENV=local
+   ENV=local or prod
+   NEXT_PUBLIC_URL=your_deployment_url (http://localhost:3000 for local development)
    OPENAI_API_KEY=your_openai_api_key
+   NEXT_TELEMETRY_DISABLED=1
    ```
 4. Run the development server:
    ```bash
