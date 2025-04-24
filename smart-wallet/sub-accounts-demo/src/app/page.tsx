@@ -1,24 +1,25 @@
 'use client'
 
 import { parseEther } from 'viem'
-import { useAccount, useConnect, useDisconnect, useSendTransaction } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useSendTransaction, useSignMessage } from 'wagmi'
 
 function App() {
   const account = useAccount()
   const { connectors, connect, status, error } = useConnect()
   const { disconnect } = useDisconnect()
   const { sendTransactionAsync, data } = useSendTransaction()
+  const { signMessage, data: signData } = useSignMessage()
   return (
     <>
       <div>
         <h2>Account</h2>
 
         <div>
-          status: {account.status}
+          Status: {account.status}
           <br />
-          addresses: {JSON.stringify(account.addresses)}
+          Sub Account Address: {JSON.stringify(account.addresses)}
           <br />
-          chainId: {account.chainId}
+          ChainId: {account.chainId}
         </div>
 
         {account.status === 'connected' && (
@@ -50,7 +51,17 @@ function App() {
         })}>
           Send Transaction
         </button>
+        <div>{data && "Transaction sent successfully! 🎉"}</div>
         <div>{data}</div>
+
+        <div>Sign Message</div>
+        <button 
+          type="button" 
+          onClick={() => signMessage({ message: 'Hello World' })}
+        >
+          Sign Message
+        </button>
+        <div>{signData}</div>
       </div>
     </>
   )
