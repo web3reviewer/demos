@@ -30,6 +30,6 @@
     "utf-8-validate": "^5.0.2"
   },
   "overrides": {
-    "@coinbase/wallet-sdk": "file:./coinbase-wallet-sdk-4.4.0-experimental.2.tgz"
+    "@coinbase/wallet-sdk": "4.4.0-canary.1"
   }
 }
