@@ -16,6 +16,13 @@ export function getConfig() {
         subAccounts: {
           enableAutoSubAccounts: true,
           defaultSpendLimits: {
+            84532: [
+              {
+                token: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+                allowance: toHex(parseEther('0.01')),
+                period: 86400,
+              },
+            ],
             8453: [
               {
                 token: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
