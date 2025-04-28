@@ -1,6 +1,7 @@
 import { http, cookieStorage, createConfig, createStorage } from "wagmi";
 import { baseSepolia, base } from "wagmi/chains";
 import { coinbaseWallet } from "wagmi/connectors";
+import { parseEther, toHex } from 'viem';
 
 export function getConfig() {
   return createConfig({
@@ -18,7 +19,7 @@ export function getConfig() {
             8453: [
               {
                 token: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-                allowance: "0x2386f26fc10000",
+                allowance: toHex(parseEther('0.01')),
                 period: 86400,
               },
             ],
