@@ -1,25 +1,30 @@
-import { http, cookieStorage, createConfig, createStorage } from 'wagmi'
-import { baseSepolia, base } from 'wagmi/chains'
-import { coinbaseWallet } from 'wagmi/connectors'
+import { http, cookieStorage, createConfig, createStorage } from "wagmi";
+import { baseSepolia, base } from "wagmi/chains";
+import { coinbaseWallet } from "wagmi/connectors";
+import { parseEther, toHex } from 'viem';
 
 export function getConfig() {
   return createConfig({
     chains: [baseSepolia, base],
     connectors: [
       coinbaseWallet({
-        appName: 'My Sub Account Demo',
+        appName: "My Sub Account Demo",
         preference: {
-          keysUrl: 'https://keys-dev.coinbase.com/connect',
-          options: 'smartWalletOnly',
-          enableAutomaticSubAccountCreation: true,
-          spendPermissionConfig: {
-            '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE': {
-              token: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-              allowance: '0x2386f26fc10000',
-              period: 86400,
-            },
+          keysUrl: "https://keys-dev.coinbase.com/connect",
+          options: "smartWalletOnly",
+        },
+        subAccounts: {
+          enableAutoSubAccounts: true,
+          defaultSpendLimits: {
+            8453: [
+              {
+                token: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+                allowance: toHex(parseEther('0.01')),
+                period: 86400,
+              },
+            ],
           },
-        }
+        },
       }),
     ],
     storage: createStorage({
@@ -30,11 +35,11 @@ export function getConfig() {
       [baseSepolia.id]: http(),
       [base.id]: http(),
     },
-  })
+  });
 }
 
-declare module 'wagmi' {
+declare module "wagmi" {
   interface Register {
-    config: ReturnType<typeof getConfig>
+    config: ReturnType<typeof getConfig>;
   }
 }
