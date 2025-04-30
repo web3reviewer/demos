@@ -1,19 +1,19 @@
 'use client'
 import React, { useState, useEffect } from 'react'
-import {
-  useOpenUrl,
-} from "@coinbase/onchainkit/minikit";
+
 import * as htmlToImage from 'html-to-image';
+import { ShareButton } from './ShareButton';
 
 interface FooterButtonsProps {
   onReset: () => void
+  fid: number
 }
 
-export function FooterButtons({ onReset }: FooterButtonsProps) {
-  const openUrl = useOpenUrl();
+export function FooterButtons({ onReset, fid }: FooterButtonsProps) {
+  
   const [isDownloading, setIsDownloading] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-
+ 
   // Detect if user is on mobile device
   useEffect(() => {
     const checkMobile = () => {
@@ -26,13 +26,7 @@ export function FooterButtons({ onReset }: FooterButtonsProps) {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const handleSendShoutout = () => {
-    // Create a personalized shoutout message
-    const shoutoutMessage = `Not financial advice. Just personal branding`;
-    
-    // Open Warpcast with a prefilled message
-    openUrl(`https://warpcast.com/~/compose?text=${encodeURIComponent(shoutoutMessage)}`);
-  };
+  
 
   const handleDownloadCollage = async () => {
     // Get the collage element by its ID
@@ -80,11 +74,7 @@ export function FooterButtons({ onReset }: FooterButtonsProps) {
 
   return (
     <div className="flex justify-center mt-4 mb-6 gap-3 flex-wrap px-2">
-      <button 
-        onClick={handleSendShoutout}
-        className="border border-gray-700 hover:border-lime-300 text-gray-400 py-3 px-4 md:px-6 font-mono tracking-wider transition-colors duration-300 text-sm md:text-base">
-        Share on Warpcast
-      </button>
+      <ShareButton fid={fid|| 20390} />
       <button 
         onClick={handleDownloadCollage}
         disabled={isDownloading}

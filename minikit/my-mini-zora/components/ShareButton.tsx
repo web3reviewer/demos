@@ -34,7 +34,7 @@ export function ShareButton({ fid }: ShareButtonProps) {
       const frameUrl = `${process.env.NEXT_PUBLIC_URL}/frame/${fid}`;
   
       await sdk.actions.composeCast({
-        text: "Check out my personalized Farcaster Frame! 🚀",
+        text: "Not financial advice. Just personal branding, this is my Zora Collage, whats yours?",
         embeds: [frameUrl],
       });
     } catch (error) {
@@ -49,9 +49,9 @@ export function ShareButton({ fid }: ShareButtonProps) {
     <button
       onClick={handleShare}
       disabled={loading}
-      className="absolute top-0 right-0 z-50 bg-lime-300 border border-gray-700 hover:border-lime-300 text-gray-400 py-3 px-4 md:px-6 font-mono tracking-wider transition-colors duration-300 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+      className="border border-gray-700 hover:border-lime-300 text-gray-400 py-3 px-4 md:px-6 font-mono tracking-wider transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base"
     >
-      {loading ? "Sharing..." : `Share to Farcaster (${fid})`}
+      {loading ? "Sharing..." : `Share to Farcaster`}
     </button>
   );
 }
