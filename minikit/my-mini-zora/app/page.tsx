@@ -22,6 +22,7 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { ZoraWalletInput } from "@/components/ZoraWalletInput";
 import { Icon } from "@/components/Icon";
+import { ShareButton } from "@/components/ShareButton";
 export default function App() {
   const { setFrameReady, isFrameReady, context } = useMiniKit();
   const [frameAdded, setFrameAdded] = useState(false);
@@ -96,6 +97,7 @@ export default function App() {
 
         <main className="flex-1">
         <ZoraWalletInput />
+        <ShareButton fid={context?.user?.fid || 9} /> 
         </main>
 
         <footer className="mt-2 pt-4 flex justify-center">
