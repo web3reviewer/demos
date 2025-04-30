@@ -77,12 +77,16 @@ export function ZoraWalletInput() {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black">
+    <div className="fixed inset-0  flex items-center justify-center bg-black">
       <div className="w-full max-w-md relative">
         <div className={`border ${isFocused ? 'border-lime-700/70' : 'border-lime-700/40'} bg-black p-8 relative mx-4 transition-colors duration-300`}>
           <h2 className="text-5xl font-bold text-white mb-8 text-center font-mono">
             ENTER YOUR HANDLE
           </h2>
+          
+          <p className="text-gray-400 text-center mb-6 font-mono text-sm">
+            Search your Zora handle to generate a collage of your top 5 tokens
+          </p>
 
           <div className="space-y-6">
             <div className={`relative bg-[#1a1e2e] overflow-hidden ${isFocused ? 'ring-1 ring-lime-700/30' : ''}`}>

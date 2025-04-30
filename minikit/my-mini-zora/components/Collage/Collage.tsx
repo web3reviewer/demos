@@ -1,9 +1,20 @@
 import { CollageImage } from './CollageImage'
 import { ZoraToken } from '@/app/api/zora-tokens/route'
+import { useMemo } from 'react'
 
 export function Collage({ tokens, displayName, selectedToken, setSelectedToken }: { tokens: ZoraToken[], displayName: string, selectedToken: ZoraToken | null, setSelectedToken: (token: ZoraToken | null) => void }) {
   // Create a safe tokens array with fallbacks for missing items
   const safeTokens = tokens || [];
+  
+  // Dynamic font size calculation based on display name length
+  const dynamicFontSize = useMemo(() => {
+    const name = displayName || 'name';
+    if (name.length <= 6) return 'text-5xl md:text-6xl lg:text-7xl';
+    if (name.length <= 10) return 'text-4xl md:text-5xl lg:text-6xl';
+    if (name.length <= 15) return 'text-3xl md:text-4xl lg:text-5xl';
+    if (name.length <= 20) return 'text-2xl md:text-3xl lg:text-4xl';
+    return 'text-xl md:text-2xl lg:text-3xl';
+  }, [displayName]);
 
   return (
     <div className="w-full">
@@ -61,8 +72,10 @@ export function Collage({ tokens, displayName, selectedToken, setSelectedToken }
         
         {/* Middle cell spans 2 columns */}
         <div className="col-span-2 flex items-center justify-center">
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-blue-500" 
-              style={{ fontFamily: 'sans-serif' }}>
+          <h1 
+            className={`${dynamicFontSize} font-bold text-blue-500 text-center px-2 break-words max-w-full`}
+            style={{ fontFamily: 'sans-serif' }}
+          >
             {displayName || 'name'}
           </h1>
         </div>
