@@ -21,16 +21,25 @@ export function CollageImage({ src, alt, className, priority = false, onClick, t
   }
   
   return (
-    <div className={cn("relative w-full h-full", className)}>
+    <div className={cn("relative w-full h-full group", className)}>
       <Link href={`token/${token?.address}?${queryString.toString()}`} className="block w-full h-full" onClick={onClick} >
         <Image
           src={src || "/placeholder.svg"}
           alt={alt}
           fill
-          className="object-cover grayscale hover:grayscale-0 transition-all duration-300"
+          className="object-cover transition-all duration-300"
           priority={priority}
           sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
         />
+        
+        {/* Token name overlay - visible only on hover */}
+        {token?.name && (
+          <div className="absolute inset-0 flex items-start justify-center p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            <span className="font-medium text-lime-500 text-sm px-2 py-1 bg-black/70 rounded" style={{ fontFamily: 'monospace' }}>
+              {token.name}
+            </span>
+          </div>
+        )}
       </Link>
       {/* Scanline effect */}
       <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px]"></div>
