@@ -18,7 +18,7 @@ export function Collage({ tokens, displayName, selectedToken, setSelectedToken }
 
   return (
     <div className="w-full " id="collage-container">
-      {/* Grid layout that precisely matches the image */}
+    
       <div className="grid grid-cols-3 gap-2">
         {/* Top row - 3 images */}
         <div className="aspect-square">
