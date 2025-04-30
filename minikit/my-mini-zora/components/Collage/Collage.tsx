@@ -17,7 +17,7 @@ export function Collage({ tokens, displayName, selectedToken, setSelectedToken }
   }, [displayName]);
 
   return (
-    <div className="w-full">
+    <div className="w-full collage-container">
       {/* Grid layout that precisely matches the image */}
       <div className="grid grid-cols-3 gap-2">
         {/* Top row - 3 images */}
