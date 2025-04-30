@@ -9,7 +9,7 @@ interface FooterButtonsProps {
 
 export function FooterButtons({ onReset, displayName }: FooterButtonsProps) {
   return (
-    <div className="flex justify-center mt-4 mb-6 gap-3 flex-wrap px-2">
+    <div className="flex justify-center mt-4 mb-6 gap-3 flex-wrap px-2 bg-black">
       <ShareButton displayName={displayName} />
       <button 
         onClick={onReset}

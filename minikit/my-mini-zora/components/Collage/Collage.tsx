@@ -17,7 +17,7 @@ export function Collage({ tokens, displayName, selectedToken, setSelectedToken }
   }, [displayName]);
 
   return (
-    <div className="w-full " id="collage-container">
+    <div className="w-full bg-black" id="collage-container">
     
       <div className="grid grid-cols-3 gap-2">
         {/* Top row - 3 images */}

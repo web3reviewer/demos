@@ -39,8 +39,11 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Save the image to Vercel Blob
-    const blob = await put(`images/${displayName}.png`, readableStream, {
+    // URL encode the displayName to handle special characters like parentheses
+    const encodedDisplayName = encodeURIComponent(displayName);
+
+    // Save the image to Vercel Blob with encoded filename
+    const blob = await put(`images/${encodedDisplayName}.png`, readableStream, {
       access: "public",
       contentType: "image/png",
       allowOverwrite: true,

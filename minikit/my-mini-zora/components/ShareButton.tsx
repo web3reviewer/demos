@@ -46,10 +46,12 @@ export function ShareButton({ displayName }: ShareButtonProps) {
         quality: 1.0,
         pixelRatio: isMobile ? 3 : 2, // Higher resolution for mobile
         cacheBust: true,
+        backgroundColor: '#000000', // Explicitly set black background
         style: {
           transform: 'none',
           width: `${collageContainer.offsetWidth}px`,
-          height: `${collageContainer.offsetHeight}px`
+          height: `${collageContainer.offsetHeight}px`,
+          backgroundColor: '#000000' // Also set in style
         }
       });
       
@@ -93,7 +95,9 @@ export function ShareButton({ displayName }: ShareButtonProps) {
     setStatus('sharing');
     
     try {
-      const frameUrl = `${process.env.NEXT_PUBLIC_URL}/frame/${displayName}`;
+      // URL encode the displayName for the frame URL
+      const encodedDisplayName = encodeURIComponent(displayName);
+      const frameUrl = `${process.env.NEXT_PUBLIC_URL}/frame/${encodedDisplayName}`;
       
       await sdk.actions.composeCast({
         text: "Not financial advice. Just personal branding, this is my Zora Collage, whats yours?",

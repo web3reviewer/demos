@@ -69,7 +69,7 @@ export function ZoraWalletInput() {
 
   if (tokens.length > 0 && profileData) {
     return (
-      <div className="w-full">
+      <div className="w-full bg-black">
         <Collage selectedToken={selectedToken} setSelectedToken={setSelectedToken} tokens={tokens} displayName={profileData.displayName || ''} />
         <FooterButtons onReset={handleReset} displayName={profileData.displayName || ''} />
       </div>
