@@ -6,7 +6,7 @@ import { validateHandle } from '@/lib/validateWallet'
 import { ZoraTokenResponse, ZoraToken } from '@/app/api/zora-tokens/route'
 import { FooterButtons } from '@/components/FooterButtons'
 
-export function ZoraWalletInput({ fid }: { fid: number }) {
+export function ZoraWalletInput() {
   const [handle, setHandle] = useState('')
   const [tokens, setTokens] = useState<ZoraToken[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -71,7 +71,7 @@ export function ZoraWalletInput({ fid }: { fid: number }) {
     return (
       <div className="w-full">
         <Collage selectedToken={selectedToken} setSelectedToken={setSelectedToken} tokens={tokens} displayName={profileData.displayName || ''} />
-        <FooterButtons onReset={handleReset} fid={fid} />
+        <FooterButtons onReset={handleReset} displayName={profileData.displayName || ''} />
       </div>
     )
   }

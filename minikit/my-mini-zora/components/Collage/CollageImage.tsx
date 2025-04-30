@@ -19,8 +19,6 @@ export function CollageImage({ src, alt, className, priority = false, onClick, t
   if (token) {
     queryString.set('name', token.name)
   }
-
-  console.log(token, 'token')
   
   return (
     <div className={cn("relative w-full h-full", className)}>

@@ -1,153 +1,109 @@
-import { CollageImage } from './CollageImage'
-import { ZoraToken } from '@/app/api/zora-tokens/route'
+import Image from "next/image";
+import Link from "next/link";
+import { ExternalLink } from "lucide-react";
 
-export function Collage({ tokens, displayName, selectedToken, setSelectedToken }: { tokens: ZoraToken[], displayName: string, selectedToken: ZoraToken | null, setSelectedToken: (token: ZoraToken | null) => void }) {
-  // Create a safe tokens array with fallbacks for missing items
-  const safeTokens = tokens || [];
 
-  // Updated layout configuration for vertical masonry layout
-  const layoutConfig = [
-    { gridArea: "top1", position: 0, bgColor: "#E04E5D" }, // Top left - red
-    { gridArea: "top2", position: 1, bgColor: "#F4DC7D" }, // Top right - yellow
-    { gridArea: "middle", position: 2, bgColor: "#F9F6E5" }, // Middle - cream
-    { gridArea: "right", position: 3, bgColor: "#E04E5D" }, // Right - red
-    { gridArea: "bottom", position: 4, bgColor: "#E04E5D" }, // Bottom - red
-  ];
+type CollageSoloProps = {
+  tokenAddress: string;
+  title: string;
+  holders: string;
+  id: string;
+  description: string;
+  format: string;
+  size: string;
+  created: string;
+  collection: string;
+  imagePath: string;
+};
 
+export function CollageSolo({
+  tokenAddress,
+  title,
+  holders,
+  id,
+  description,
+  format,
+  size,
+  created,
+  collection,
+  imagePath,
+}: CollageSoloProps) {
   return (
-    <div className="w-full">
-      <div id="collage-container" className="relative w-full max-w-[800px] mx-auto px-2 py-4">
-        {/* Main title below the grid */}
-        <div className="text-center my-4 py-3">
-          <h1 className="text-2xl md:text-3xl font-bold text-blue-500"
-              style={{ fontFamily: 'monospace' }}>
-            {displayName || 'soheybuildsbase'}
-          </h1>
-        </div>
+    <div className="w-full max-w-4xl">
+     
 
-        {/* Full grid layout using CSS grid with minimal gaps */}
-        <div 
-          className="grid grid-cols-6 gap-[2px]" 
-          style={{
-            gridTemplateAreas: `
-              "top1 top1 top2 top2 top2 top2"
-              "middle middle middle middle right right"
-              "middle-bottom middle-bottom middle-bottom middle-bottom bottomRight bottomRight"
-            `,
-            gridAutoRows: "auto",
-          }}
-        >
-          {/* Top left - red */}
-          <div 
-            style={{ 
-              gridArea: 'top1',
-              backgroundColor: layoutConfig[0].bgColor
-            }}
-            className="aspect-square"
-          >
-            {safeTokens[0] && (
-              <CollageImage 
-                token={safeTokens[0]}
-                src={safeTokens[0].imageUrl?.medium || '/placeholder.svg'}
-                alt={safeTokens[0].name || 'Token 1'}
-                className={`h-full w-full object-cover ${selectedToken?.name === safeTokens[0].name ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => safeTokens[0] && setSelectedToken(safeTokens[0])}
-              />
-            )}
+      <div className="border border-gray-700 bg-gray-900 p-0.5">
+        <div className="border border-gray-800 bg-black p-6">
+          {/* Image header */}
+          <div className="mb-6 flex justify-between items-start">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white font-mono">{title}</h1>
+              <p className="text-xs text-gray-500 font-mono mt-1">Holders: {holders}</p>
+            </div>
+            <div className="bg-gray-900 border border-gray-700 px-3 py-1 text-xs text-lime-300 font-mono">
+              ID: {id}
+            </div>
           </div>
-          
-          {/* Top right - yellow */}
-          <div 
-            style={{ 
-              gridArea: 'top2',
-              backgroundColor: layoutConfig[1].bgColor
-            }}
-            className="aspect-[2/1]"
-          >
-            {safeTokens[1] && (
-              <CollageImage 
-                token={safeTokens[1]}
-                src={safeTokens[1].imageUrl?.medium || '/placeholder.svg'}
-                alt={safeTokens[1].name || 'Token 2'}
-                className={`h-full w-full object-cover ${selectedToken?.name === safeTokens[1].name ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => safeTokens[1] && setSelectedToken(safeTokens[1])}
-              />
-            )}
-          </div>
-          
-          {/* Middle - cream - ENLARGED to take more vertical space */}
-          <div 
-            style={{ 
-              gridArea: 'middle',
-              backgroundColor: layoutConfig[2].bgColor
-            }}
-            className="aspect-[4/5]"
-          >
-            {safeTokens[2] && (
-              <CollageImage 
-                token={safeTokens[2]}
-                src={safeTokens[2].imageUrl?.medium || '/placeholder.svg'}
-                alt={safeTokens[2].name || 'Token 3'}
-                className={`h-full w-full object-cover ${selectedToken?.name === safeTokens[2].name ? 'border-2 border-blue-500' : ''}`}
+
+          {/* Main image */}
+          <div className="relative border border-gray-700 bg-gray-900 p-0.5 mb-6">
+            <div className="relative aspect-[4/3] w-full">
+              <Image
+                src={imagePath}
+                alt={title}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 800px"
                 priority
-                onClick={() => safeTokens[2] && setSelectedToken(safeTokens[2])}
               />
-            )}
+              {/* Scanline effect */}
+              <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(to_bottom,transparent_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px]"></div>
+            </div>
           </div>
-          
-          {/* Right - red */}
-          <div 
-            style={{ 
-              gridArea: 'right',
-              backgroundColor: layoutConfig[3].bgColor
-            }}
-            className="aspect-[1/2]"
-          >
-            {safeTokens[3] && (
-              <CollageImage 
-                token={safeTokens[3]}
-                src={safeTokens[3].imageUrl?.medium || '/placeholder.svg'}
-                alt={safeTokens[3].name || 'Token 4'}
-                className={`h-full w-full object-cover ${selectedToken?.name === safeTokens[3].name ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => safeTokens[3] && setSelectedToken(safeTokens[3])}
-              />
-            )}
+
+          {/* Description */}
+          <div className="mb-8">
+            <h2 className="text-sm font-mono text-gray-400 mb-2">DESCRIPTION:</h2>
+            <p className="text-white font-mono text-sm leading-relaxed">{description}</p>
           </div>
-          
-          {/* Bottom left - red - MADE EXTRA LARGE to fill the fluid image */}
-          <div 
-            style={{ 
-              gridArea: 'middle-bottom',
-              backgroundColor: layoutConfig[4].bgColor
+
+          {/* Zora link button */}
+          <Link
+            href={`https://zora.co/coin/base:${tokenAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center space-x-2 bg-black border border-gray-700 hover:border-lime-300 text-white py-3 px-6 font-mono tracking-wider transition-colors duration-300 group"
+            style={{
+              clipPath: "polygon(0 0, 100% 0, 95% 100%, 0 100%)",
             }}
-            className="aspect-auto min-h-[250px]"
           >
-            {safeTokens[4] && (
-              <CollageImage 
-                token={safeTokens[4]}
-                src={safeTokens[4].imageUrl?.medium || '/placeholder.svg'}
-                alt={safeTokens[4].name || 'Token 5'}
-                className={`h-full w-full object-cover ${selectedToken?.name === safeTokens[4].name ? 'border-2 border-blue-500' : ''}`}
-                onClick={() => safeTokens[4] && setSelectedToken(safeTokens[4])}
-              />
-            )}
-          </div>
-          
-          {/* "Built with MiniKit" text in bottomRight area - always cream colored */}
-          <div 
-            style={{ 
-              gridArea: 'bottomRight',
-              backgroundColor: "#F9F6E5"
-            }}
-            className="aspect-square flex items-center justify-center"
-          >
-            <div className="text-center p-4">
-              <p className="text-[#FF1493] font-medium text-sm md:text-base">built with</p>
-              <p className="text-[#FF1493] font-bold text-lg md:text-xl mt-1">MiniKit</p>
+            <span className="group-hover:text-lime-300 transition-colors duration-300">VIEW ON ZORA</span>
+            <ExternalLink size={14} className="group-hover:text-lime-300 transition-colors duration-300" />
+          </Link>
+
+          {/* Technical details */}
+          <div className="mt-12 pt-6 border-t border-gray-800">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <h3 className="text-xs text-gray-500 font-mono mb-1">FORMAT</h3>
+                <p className="text-xs text-white font-mono">{format}</p>
+              </div>
+              <div>
+                <h3 className="text-xs text-gray-500 font-mono mb-1">TOTAL SUPPLY</h3>
+                <p className="text-xs text-white font-mono">{size}</p>
+              </div>
+              <div>
+                <h3 className="text-xs text-gray-500 font-mono mb-1">CREATOR</h3>
+                <p className="text-xs text-white font-mono">{created}</p>
+              </div>
+              <div>
+                <h3 className="text-xs text-gray-500 font-mono mb-1">24H VOLUME</h3>
+                <p className="text-xs text-white font-mono">{collection}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -18,7 +18,6 @@ export async function GET(req: NextRequest) {
       getProfileBalances({ identifier: cleanHandle }),
     ])
 
-    console.log(JSON.stringify(profileRes, null, 2))
 
     // Extract profile information using the correct structure
     const profileData = profileRes?.data 

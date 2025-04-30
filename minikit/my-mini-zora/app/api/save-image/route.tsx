@@ -1,76 +1,46 @@
-import { loadGoogleFont } from "@/lib/utils";
-import { ImageResponse } from "next/og";
 import { NextRequest } from "next/server";
 import { put } from "@vercel/blob";
 
 // Force dynamic rendering to ensure fresh image generation on each request
 export const dynamic = "force-dynamic";
 
-// Define the dimensions for the generated image
-const size = {
-  width: 800,
-  height: 418,
-};
-
 /**
- * POST handler for generating dynamic images and saving to Blob storage
- * @param request - The incoming HTTP request with FID in the body
+ * POST handler for saving captured images to Blob storage
+ * @param request - The incoming HTTP request with displayName and base64 image data
  * @returns JSON with the blob URL
  */
 export async function POST(request: NextRequest) {
   try {
-    // Extract the FID from the request body
-    const { fid } = await request.json();
+    // Extract the displayName and imageData from the request body
+    const { displayName, imageData } = await request.json();
     
-    // Load font for the text
-    const fontData = await loadGoogleFont("Inter", `Hello FID: ${fid}`);
-
-    // Generate the image using ImageResponse
-    const imageResponse = new ImageResponse(
-      (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#000000", // Black background
-            color: "#ffffff", // White text
-            fontFamily: "Inter",
-            fontSize: 48,
-            padding: "40px",
-          }}
-        >
-          Hello FID: {fid}
-        </div>
-      ),
-      {
-        ...size,
-        fonts: [
-          {
-            name: "Inter",
-            data: fontData,
-            style: "normal",
-          },
-        ],
-      }
-    );
-
-    // Get the image data as an ArrayBuffer
-    const imageArrayBuffer = await imageResponse.arrayBuffer();
-
-    // Convert ArrayBuffer to ReadableStream for Vercel Blob
+    if (!displayName) {
+      return new Response("Missing displayName parameter", { status: 400 });
+    }
+    
+    if (!imageData) {
+      return new Response("Missing imageData parameter", { status: 400 });
+    }
+    
+    // Ensure imageData is properly formatted (should be a data URL)
+    if (!imageData.startsWith('data:image/')) {
+      return new Response("Invalid image data format", { status: 400 });
+    }
+    
+    // Convert the base64 data URL to a buffer
+    const base64Data = imageData.split(',')[1];
+    const buffer = Buffer.from(base64Data, 'base64');
+    
+    // Convert buffer to ReadableStream for Vercel Blob
     const readableStream = new ReadableStream({
       start(controller) {
-        controller.enqueue(new Uint8Array(imageArrayBuffer));
+        controller.enqueue(new Uint8Array(buffer));
         controller.close();
       },
     });
 
     // Save the image to Vercel Blob
-    const blob = await put(`images/${fid}.png`, readableStream, {
+    const blob = await put(`images/${displayName}.png`, readableStream, {
       access: "public",
       contentType: "image/png",
       allowOverwrite: true,
@@ -80,7 +50,7 @@ export async function POST(request: NextRequest) {
     return Response.json({ blobUrl: blob.url });
   } catch (err: unknown) {
     console.error("❌ API error in /api/save-image:", err);
-    return new Response(`Failed to generate image: ${err instanceof Error ? err.message : String(err)}`, {
+    return new Response(`Failed to save image: ${err instanceof Error ? err.message : String(err)}`, {
       status: 500,
     });
   }
