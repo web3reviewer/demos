@@ -96,7 +96,7 @@ export default function App() {
         </header>
 
         <main className="flex-1">
-        <ZoraWalletInput />
+        <ZoraWalletInput displayName={context?.user?.displayName || ''}/>
         
         </main>
 
