@@ -6,7 +6,7 @@ import { validateHandle } from '@/lib/validateWallet'
 import { ZoraTokenResponse, ZoraToken } from '@/app/api/zora-tokens/route'
 import { FooterButtons } from '@/components/FooterButtons'
 
-export function ZoraWalletInput() {
+export function ZoraWalletInput({ displayName }: { displayName: string }  ) {
   const [handle, setHandle] = useState('')
   const [tokens, setTokens] = useState<ZoraToken[]>([])
   const [error, setError] = useState<string | null>(null)
@@ -80,12 +80,20 @@ export function ZoraWalletInput() {
     <div className="fixed inset-0  flex items-center justify-center bg-black">
       <div className="w-full max-w-md relative">
         <div className={`border ${isFocused ? 'border-lime-700/70' : 'border-lime-700/40'} bg-black p-8 relative mx-4 transition-colors duration-300`}>
-          <h2 className="text-5xl font-bold text-white mb-8 text-center font-mono">
-            ENTER YOUR HANDLE
+          <h2 className="text-3xl font-bold text-white mb-8 text-center font-mono">
+            {displayName ? (
+              <>
+                <span className="block mb-2">Hey</span>
+                <span className="block text-lime-400 mb-2">{displayName}</span>
+                <span className="block">ENTER YOUR ZORA HANDLE TO START</span>
+              </>
+            ) : (
+              <span className="break-words">ENTER YOUR ZORA HANDLE TO START</span>
+            )}
           </h2>
           
           <p className="text-gray-400 text-center mb-6 font-mono text-sm">
-            Search your Zora handle to generate a collage of your top 5 tokens
+            Enter your Zora handle to generate a collage of your top 5 tokens
           </p>
 
           <div className="space-y-6">
@@ -117,9 +125,7 @@ export function ZoraWalletInput() {
             </button>
           </div>
 
-          <div className="mt-8 text-center">
-            <p className="text-xs text-gray-500 font-mono">YOUR TOKENS WILL APPEAR IN THE COLLAGE</p>
-          </div>
+         
 
           {/* Corner decorations */}
           <div className="absolute -top-6 -left-6 w-12 h-12">
