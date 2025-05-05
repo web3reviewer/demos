@@ -69,7 +69,7 @@ export default function Home() {
                   ],
                 }),
               },
-            ], // Simple transfer of 0.01 ETH to the contract
+            ], // Simple transfer of 0.01 USDC to the contract
           capabilities: {
             dataCallback: {
               requests: requests,
