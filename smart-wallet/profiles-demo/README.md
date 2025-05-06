@@ -1,3 +1,5 @@
-# Profiles Demo - Smart Wallet
+# Profiles Demo
 
-This demo shows the Profiles Feature from Smart Wallet with a simple Checkout application.
+This is Profiles Demo
+
+Full guide [here](https://docs.base.org/identity/smart-wallet/guides/profiles).
