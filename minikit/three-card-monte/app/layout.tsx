@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background">
+      <body className="flex min-h-screen flex-col items-center justify-center p-4 bg-[#1a1a30]">
         <Providers>{children}</Providers>
       </body>
     </html>

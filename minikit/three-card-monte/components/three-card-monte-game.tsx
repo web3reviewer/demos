@@ -1,14 +1,18 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card } from "@/components/card"
 import { GameControls } from "@/components/game-controls"
+import { Leaderboard } from "@/components/leaderboard"
+import { UsernameModal } from "@/components/username-modal"
 import { shuffle } from "@/lib/shuffle"
 import confetti from "canvas-confetti"
 import { useMediaQuery } from "@/hooks/use-media-query"
+import { useMiniKit } from "@coinbase/onchainkit/minikit"
 
 export const ThreeCardMonteGame = () => {
+  const { context } = useMiniKit()
   const [cards, setCards] = useState([
     { id: 1, isTarget: true, flipped: false, image: "/images/card1.png" },
     { id: 2, isTarget: false, flipped: false, image: "/images/card2.png" },
@@ -19,10 +23,29 @@ export const ThreeCardMonteGame = () => {
   const [gameEnded, setGameEnded] = useState(false)
   const [score, setScore] = useState(0)
   const [message, setMessage] = useState("Click 'Start Game' to begin!")
+  const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false)
+  const [isUsernameModalOpen, setIsUsernameModalOpen] = useState(false)
+  const [username, setUsername] = useState<string>("")
 
   // Check if the device is mobile
   const isMobile = useMediaQuery("(max-width: 640px)")
   const isTablet = useMediaQuery("(min-width: 641px) and (max-width: 1024px)")
+
+  useEffect(() => {
+    // Check if we have a context with user information
+    if (context?.user?.displayName) {
+      setUsername(context.user.displayName)
+    } else {
+      // If no context or no display name, show the username modal
+      setIsUsernameModalOpen(true)
+    }
+  }, [context])
+
+  // Function to handle username submission
+  const handleUsernameSubmit = (name: string) => {
+    setUsername(name)
+    setIsUsernameModalOpen(false)
+  }
 
   // Function to trigger confetti animation
   const triggerConfetti = () => {
@@ -117,6 +140,11 @@ export const ThreeCardMonteGame = () => {
 
       // Trigger confetti animation when the user wins
       triggerConfetti()
+      
+      // Show the leaderboard after a win
+      setTimeout(() => {
+        setIsLeaderboardOpen(true)
+      }, 1500)
     } else {
       setMessage("❌ Wrong card! The target was elsewhere.")
     }
@@ -151,11 +179,32 @@ export const ThreeCardMonteGame = () => {
 
   const cardDimensions = getCardDimensions()
 
+  const openLeaderboard = () => {
+    setIsLeaderboardOpen(true)
+  }
+
+  const closeLeaderboard = () => {
+    setIsLeaderboardOpen(false)
+  }
+
   return (
     <div className="flex flex-col items-center">
       <div className="mb-4 sm:mb-6 text-center px-2">
         <h2 className="text-lg sm:text-xl text-white mb-2">{message}</h2>
-        <p className="text-yellow-300">Score: {score}</p>
+        <div className="flex items-center justify-center gap-4">
+          <p className="text-yellow-300">Score: {score}</p>
+          <button
+            onClick={openLeaderboard}
+            className="px-3 py-1 text-sm bg-gradient-to-r from-indigo-600 to-indigo-800 hover:from-indigo-700 hover:to-indigo-900 text-white rounded-full transition-colors shadow-md flex items-center gap-1"
+          >
+            <span>🏆</span> Leaderboard
+          </button>
+        </div>
+        {username && (
+          <p className="text-gray-300 text-sm mt-2">
+            Playing as: <span className="font-medium text-blue-300">{username}</span>
+          </p>
+        )}
       </div>
 
       <div className={`relative w-full ${isMobile ? "h-[500px]" : "h-[300px]"} mb-6 sm:mb-8`}>
@@ -202,6 +251,18 @@ export const ThreeCardMonteGame = () => {
         gameStarted={gameStarted}
         gameEnded={gameEnded}
         isShuffling={isShuffling}
+      />
+
+      <Leaderboard
+        isOpen={isLeaderboardOpen}
+        onClose={closeLeaderboard}
+        userScore={score}
+        userName={username}
+      />
+
+      <UsernameModal
+        isOpen={isUsernameModalOpen}
+        onSubmit={handleUsernameSubmit}
       />
     </div>
   )
