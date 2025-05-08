@@ -6,6 +6,7 @@ import { Card } from "@/components/card"
 import { GameControls } from "@/components/game-controls"
 import { Leaderboard } from "@/components/leaderboard"
 import { UsernameModal } from "@/components/username-modal"
+import { TransactionComponent } from "@/components/TransactionComponent"
 import { shuffle } from "@/lib/shuffle"
 import confetti from "canvas-confetti"
 import { useMediaQuery } from "@/hooks/use-media-query"
@@ -26,6 +27,7 @@ export const ThreeCardMonteGame = () => {
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false)
   const [isUsernameModalOpen, setIsUsernameModalOpen] = useState(false)
   const [username, setUsername] = useState<string>("")
+  const [userWon, setUserWon] = useState(false)
 
   // Check if the device is mobile
   const isMobile = useMediaQuery("(max-width: 640px)")
@@ -92,6 +94,7 @@ export const ThreeCardMonteGame = () => {
     )
     setGameStarted(true)
     setGameEnded(false)
+    setUserWon(false)
     setMessage("Remember the target card!")
 
     // Show target card for 2 seconds, then flip and shuffle
@@ -137,6 +140,7 @@ export const ThreeCardMonteGame = () => {
     if (selectedCard?.isTarget) {
       setScore((prev) => prev + 1)
       setMessage("🎉 Correct! You found the target card!")
+      setUserWon(true)
 
       // Trigger confetti animation when the user wins
       triggerConfetti()
@@ -147,6 +151,7 @@ export const ThreeCardMonteGame = () => {
       }, 1500)
     } else {
       setMessage("❌ Wrong card! The target was elsewhere.")
+      setUserWon(false)
     }
 
     // Reveal all cards after a short delay
@@ -163,6 +168,7 @@ export const ThreeCardMonteGame = () => {
     ])
     setGameStarted(false)
     setGameEnded(false)
+    setUserWon(false)
     setMessage("Click 'Start Game' to begin!")
   }
 
@@ -252,6 +258,14 @@ export const ThreeCardMonteGame = () => {
         gameEnded={gameEnded}
         isShuffling={isShuffling}
       />
+
+      {/* Only render the TransactionComponent when user wins */}
+      {userWon && gameEnded && (
+        <div className="mt-6 p-4 bg-gradient-to-r from-purple-900/60 to-indigo-900/60 rounded-lg backdrop-blur-sm border border-indigo-500/50">
+          <h3 className="text-lg text-yellow-400 text-center mb-3">🎁 Claim Your Win Reward!</h3>
+          <TransactionComponent />
+        </div>
+      )}
 
       <Leaderboard
         isOpen={isLeaderboardOpen}

@@ -10,8 +10,6 @@ import { useEffect, useMemo, useState, useCallback } from "react";
 import { Button } from "@/components/DemoComponents";
 import { Icon } from "@/components/DemoComponents";
 import { ThreeCardMonteGame } from "@/components/three-card-monte-game";
-import { TransactionComponent } from "@/components/TransactionComponent";
-
 
 export default function App() {
   const { setFrameReady, isFrameReady, context } = useMiniKit();
@@ -72,9 +70,6 @@ export default function App() {
 
         <main className="flex-1">
           <ThreeCardMonteGame />
-          <div className="mt-6">
-            <TransactionComponent />
-          </div>
         </main>
 
         <footer className="mt-2 pt-4 flex justify-center">

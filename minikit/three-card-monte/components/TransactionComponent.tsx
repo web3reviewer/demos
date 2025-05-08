@@ -20,9 +20,7 @@ import { useNotification } from "@coinbase/onchainkit/minikit";
 
 
 
-export function TransactionComponent({
-
-}) {
+export function TransactionComponent() {
   const { address } = useAccount();
   
   // Example transaction call - sending 0 ETH to self
@@ -50,41 +48,33 @@ export function TransactionComponent({
   }, [sendNotification]);
 
   return (
-    <>
-      
-        <div className="flex flex-col items-center">
-          {address ? (
-            <Transaction
-              calls={calls}
-              onSuccess={handleSuccess}
-              onError={(error: TransactionError) =>
-                console.error("Transaction failed:", error)
-              }
-            >
-              <TransactionButton className="text-white text-md" />
-              <TransactionStatus>
-                <TransactionStatusAction />
-                <TransactionStatusLabel />
-              </TransactionStatus>
-              <TransactionToast className="mb-4">
-                <TransactionToastIcon />
-                <TransactionToastLabel />
-                <TransactionToastAction />
-              </TransactionToast>
-            </Transaction>
-          ) : (
-            <div className="flex flex-col items-center space-y-3">
-              <p className="text-yellow-400 text-sm text-center">
-                Connect your wallet to send a transaction
-              </p>
-              <ConnectWallet>
-                <button className="bg-[var(--app-accent)] hover:bg-[var(--app-accent-hover)] text-white py-2 px-4 rounded-md text-sm font-medium">
-                  Connect Wallet
-                </button>
-              </ConnectWallet>
-            </div>
-          )}
-        </div>
-    </>
+    <div className="flex flex-col items-center">
+      {address ? (
+        <Transaction
+          calls={calls}
+          onSuccess={handleSuccess}
+          onError={(error: TransactionError) =>
+            console.error("Transaction failed:", error)
+          }
+        >
+          <TransactionButton className="bg-[var(--app-accent)] hover:bg-[var(--app-accent-hover)] text-white py-2 px-4 rounded-md text-sm font-medium" />
+          <TransactionStatus>
+            <TransactionStatusAction />
+            <TransactionStatusLabel />
+          </TransactionStatus>
+          <TransactionToast className="mb-4">
+            <TransactionToastIcon />
+            <TransactionToastLabel />
+            <TransactionToastAction />
+          </TransactionToast>
+        </Transaction>
+      ) : (
+        <ConnectWallet>
+          <button className="bg-[var(--app-accent)] hover:bg-[var(--app-accent-hover)] text-white py-2 px-4 rounded-md text-sm font-medium">
+            Connect Wallet
+          </button>
+        </ConnectWallet>
+      )}
+    </div>
   );
 } 
