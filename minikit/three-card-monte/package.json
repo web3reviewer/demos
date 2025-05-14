@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@coinbase/cdp-sdk": "^1.9.0",
     "@coinbase/onchainkit": "latest",
     "@farcaster/frame-sdk": "^0.0.35",
     "@radix-ui/react-slot": "^1.2.2",
