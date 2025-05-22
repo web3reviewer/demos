@@ -15,7 +15,7 @@ import { useFollowers } from "@/hooks/useFollowers";
 
 
 // Base URL for the application
-const BASE_URL = process.env.NEXT_PUBLIC_URL || "https://shoutout-generator.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_URL;
 
 
 export default function App() {
