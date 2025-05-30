@@ -23,7 +23,7 @@ This repository contains example applications demonstrating various [Base] and [
 ### MiniKit Demo
 
 - Location: `minikit/`
-- Description: A minimal example of Base integration
+- Description: Shows how to create MiniApps that live in Base Wallet and Farcaster
 - Features: MiniApps, Farcaster V2, transaction handling
 
 ## Getting Started
