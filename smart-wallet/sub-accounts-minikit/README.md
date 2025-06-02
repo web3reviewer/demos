@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-oncha
 - [OnchainKit](https://www.base.org/builders/onchainkit)
 - [Tailwind CSS](https://tailwindcss.com)
 - [Next.js](https://nextjs.org/docs)
+- [Sub Accounts](https://docs.base.org/identity/smart-wallet/concepts/features/optional/sub-accounts)
 
 ## Getting Started
 
