@@ -2,6 +2,8 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { PrivyProvider } from "@privy-io/react-auth";
+import { toHex, parseEther } from "viem";
+import {base, baseSepolia} from 'viem/chains';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -46,6 +48,37 @@ function MyApp({ Component, pageProps }: AppProps) {
           embeddedWallets: {
             createOnLogin: "all-users",
           },
+          externalWallets: {
+            coinbaseWallet: {
+              config: {
+                appName: "Privy Sub Accounts",
+                appLogoUrl: "https://example.com/logo.png",
+                preference: {
+                  keysUrl: "https://keys-dev.coinbase.com/connect",
+                  options: "smartWalletOnly",
+                },
+                // Set up Sub Account support with a signer function
+                subAccounts: {
+                  enableAutoSubAccounts: true,
+                  defaultSpendLimits: {
+                    84532: [
+                      {
+                        token: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+                        allowance: toHex(parseEther("0.01")), // 0.01 ETH
+                        period: 86400, // 24h
+                      },
+                    ],
+                  },
+                },
+              },
+            },
+          },
+          appearance: {
+            walletList: ["coinbase_wallet"],
+            showWalletLoginFirst: true,
+          },
+          defaultChain: baseSepolia,
+          supportedChains: [baseSepolia, base],
         }}
       >
         <Component {...pageProps} />
