@@ -59,7 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 },
                 // Set up Sub Account support with a signer function
                 subAccounts: {
-                  enableAutoSubAccounts: true,
+                  enableAutoSubAccounts: false,
                   defaultSpendLimits: {
                     84532: [
                       {

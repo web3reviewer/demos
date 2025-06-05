@@ -5,6 +5,8 @@ import {
   useSignMessage,
   useSignMessage as useSignMessageSolana,
   WalletWithMetadata,
+  useSendTransaction,
+  useWallets,
 } from "@privy-io/react-auth";
 import axios from "axios";
 
@@ -18,9 +20,13 @@ export default function WalletCard({ wallet }: WalletCardProps) {
   const { addSessionSigners, removeSessionSigners } = useSessionSigners();
   const { signMessage: signMessageEthereum } = useSignMessage();
   const { signMessage: signMessageSolana } = useSignMessageSolana();
+  const { sendTransaction } = useSendTransaction();
+  const { wallets } = useWallets();
   const [isLoading, setIsLoading] = useState(false);
   const [isRemoteSigning, setIsRemoteSigning] = useState(false);
   const [isClientSigning, setIsClientSigning] = useState(false);
+  const [isSendingTx, setIsSendingTx] = useState(false);
+  const [isSwitchingSubAccount, setIsSwitchingSubAccount] = useState(false);
 
   // Check if this specific wallet has session signers
   const hasSessionSigners = wallet.delegated === true;
@@ -127,6 +133,54 @@ export default function WalletCard({ wallet }: WalletCardProps) {
     }
   }, [wallet.id]);
 
+  const handleSendTransaction = useCallback(async () => {
+    setIsSendingTx(true);
+    try {
+      await sendTransaction({
+        to: "0xE3070d3e4309afA3bC9a6b057685743CF42da77C",
+        value: 1000,
+      });
+      console.log("Transaction sent!");
+    } catch (error) {
+      console.error("Error sending transaction:", error);
+    } finally {
+      setIsSendingTx(false);
+    }
+  }, [sendTransaction]);
+
+  const handleSwitchToSubAccount = useCallback(async () => {
+    setIsSwitchingSubAccount(true);
+    try {
+      const wallet = wallets[0];
+      if (!wallet) {
+        console.error("No wallet found");
+        return;
+      }
+      // No need to switch chain, just get the provider
+      const provider = await wallet.getEthereumProvider();
+      console.log('Provider:', provider);
+      const subAccount = await provider.request({
+        method: 'wallet_addSubAccount',
+        params: [
+          {
+            type: 'create',
+            keys: [
+              {
+                type: 'address',
+                key: wallet.address,
+              },
+            ],
+          },
+        ],
+      });
+      console.log('Sub Account:', subAccount);
+    } catch (error) {
+      console.error('Error switching to sub account:', error);
+    } finally {
+      setIsSwitchingSubAccount(false);
+    }
+  }, [wallets]);
+
   return (
     <div className="flex flex-col gap-4 p-4 border border-gray-200 rounded-lg">
       <div className="text-sm text-violet-700">
@@ -190,6 +244,30 @@ export default function WalletCard({ wallet }: WalletCardProps) {
           }`}
         >
           {isClientSigning ? "Signing..." : "Sign message from client"}
+        </button>
+
+        <button
+          onClick={handleSendTransaction}
+          disabled={isSendingTx}
+          className={`text-sm py-2 px-4 rounded-md text-white ${
+            isSendingTx
+              ? "bg-yellow-400 cursor-not-allowed"
+              : "bg-yellow-600 hover:bg-yellow-700"
+          }`}
+        >
+          {isSendingTx ? "Sending..." : "Send transaction"}
+        </button>
+
+        <button
+          onClick={handleSwitchToSubAccount}
+          disabled={isSwitchingSubAccount}
+          className={`text-sm py-2 px-4 rounded-md text-white ${
+            isSwitchingSubAccount
+              ? "bg-indigo-400 cursor-not-allowed"
+              : "bg-indigo-600 hover:bg-indigo-700"
+          }`}
+        >
+          {isSwitchingSubAccount ? "Switching..." : "Switch to sub account"}
         </button>
       </div>
     </div>
