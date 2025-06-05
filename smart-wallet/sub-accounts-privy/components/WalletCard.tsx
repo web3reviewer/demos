@@ -8,6 +8,8 @@ import {
   useSendTransaction,
   useWallets,
 } from "@privy-io/react-auth";
+import { baseSepolia } from "@privy-io/chains";
+import {addRpcUrlOverrideToChain} from '@privy-io/chains';
 import axios from "axios";
 
 const SESSION_SIGNER_ID = process.env.NEXT_PUBLIC_SESSION_SIGNER_ID;
@@ -149,7 +151,7 @@ export default function WalletCard({ wallet }: WalletCardProps) {
   }, [sendTransaction]);
 
   const handleSwitchToSubAccount = useCallback(async () => {
-    setIsSwitchingSubAccount(true);
+
     try {
       const wallet = wallets[0];
       if (!wallet) {
@@ -258,6 +260,7 @@ export default function WalletCard({ wallet }: WalletCardProps) {
           {isSendingTx ? "Sending..." : "Send transaction"}
         </button>
 
+        {/*
         <button
           onClick={handleSwitchToSubAccount}
           disabled={isSwitchingSubAccount}
@@ -269,6 +272,7 @@ export default function WalletCard({ wallet }: WalletCardProps) {
         >
           {isSwitchingSubAccount ? "Switching..." : "Switch to sub account"}
         </button>
+        */}
       </div>
     </div>
   );

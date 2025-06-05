@@ -1,11 +1,12 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { PrivyProvider } from "@privy-io/react-auth";
+import { addRpcUrlOverrideToChain, PrivyProvider } from "@privy-io/react-auth";
 import { toHex, parseEther } from "viem";
 import {base, baseSepolia} from 'viem/chains';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const baseSepoliaOverride = addRpcUrlOverrideToChain(baseSepolia, 'https://sepolia.base.org');
   return (
     <>
       <Head>
@@ -59,7 +60,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 },
                 // Set up Sub Account support with a signer function
                 subAccounts: {
-                  enableAutoSubAccounts: false,
+                  enableAutoSubAccounts: true,
                   defaultSpendLimits: {
                     84532: [
                       {
@@ -77,8 +78,8 @@ function MyApp({ Component, pageProps }: AppProps) {
             walletList: ["coinbase_wallet"],
             showWalletLoginFirst: true,
           },
-          defaultChain: baseSepolia,
-          supportedChains: [baseSepolia, base],
+          defaultChain: baseSepoliaOverride,
+          supportedChains: [baseSepoliaOverride, base],
         }}
       >
         <Component {...pageProps} />
