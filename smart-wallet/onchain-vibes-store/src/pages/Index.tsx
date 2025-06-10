@@ -1,4 +1,3 @@
-
 import { WagmiProvider } from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { getConfig } from '@/lib/wagmi';
@@ -29,9 +28,9 @@ const Index = () => {
               VIBES STORE
             </h1>
             <p className="pixel-font text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
-              &gt; ONCHAIN MARKETPLACE FOR DIGITAL VIBES
+              &gt; ONCHAIN MARKETPLACE FOR ONCHAIN VIBES
               <br />
-              &gt; POWERED BY BASE SEPOLIA
+              &gt; POWERED BY BASE SEPOLIA + SMART WALLET PROFILES
             </p>
           </header>
 
@@ -98,50 +97,39 @@ const Index = () => {
                 {/* Features */}
                 <Card className="neon-border bg-card/30 backdrop-blur-sm">
                   <CardContent className="p-6">
-                    <h3 className="pixel-font text-lg mb-4 text-center">Why Buy Vibes?</h3>
+                    <h3 className="pixel-font text-lg mb-4 text-center">Why Buy Onchain Vibes?</h3>
                     <div className="space-y-3 text-sm">
                       <div className="flex items-start space-x-3">
                         <span className="text-accent pixel-font">&gt;</span>
-                        <span>100% authentic onchain vibes, verified onchain</span>
+                        <span>100% authentic onchain vibes, verified on Base</span>
                       </div>
                       <div className="flex items-start space-x-3">
                         <span className="text-accent pixel-font">&gt;</span>
-                        <span>Smart wallet integration for seamless payments</span>
+                        <span>Smart wallet profiles for seamless payments</span>
                       </div>
                       <div className="flex items-start space-x-3">
                         <span className="text-accent pixel-font">&gt;</span>
-                        <span>Secure data collection for delivery</span>
+                        <span>Secure profile data collection for delivery</span>
                       </div>
                       <div className="flex items-start space-x-3">
                         <span className="text-accent pixel-font">&gt;</span>
-                        <span>Powered by Base Sepolia testnet</span>
+                        <span>Powered by Coinbase Smart Wallet + Base</span>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               </div>
 
-              {/* Checkout Section */}
+              {/* One-Click Purchase Section */}
               <div className="space-y-6">
                 <div className="text-center">
-                  <h3 className="pixel-font text-2xl mb-4 text-primary">GET YOUR VIBES</h3>
+                  <h3 className="pixel-font text-2xl mb-4 text-primary">ONE-CLICK ONCHAIN VIBES</h3>
                   <p className="text-muted-foreground mb-8">
-                    Sign in with your Smart Wallet and complete the purchase to receive your onchain vibes
+                    Buy instantly with your smart wallet - no connection required!
                   </p>
                 </div>
                 
                 <CheckoutButton />
-
-                {/* Info Box */}
-                <Card className="neon-border bg-muted/20 backdrop-blur-sm">
-                  <CardContent className="p-4">
-                    <div className="text-xs space-y-2 text-muted-foreground">
-                      <p className="pixel-font text-accent">TESTNET NOTICE:</p>
-                      <p>This is running on Base Sepolia testnet. No real money required!</p>
-                      <p>Get test USDC from the faucet to try the app.</p>
-                    </div>
-                  </CardContent>
-                </Card>
               </div>
 
             </div>
@@ -150,8 +138,8 @@ const Index = () => {
           {/* Footer */}
           <footer className="relative z-10 border-t border-border mt-20 p-6">
             <div className="text-center pixel-font text-xs text-muted-foreground">
-              <p>&gt; BUILT WITH WAGMI + BASE + COINBASE SMART WALLET</p>
-              <p>&gt; VIBES STORE 2024 - BRINGING GOOD VIBES ONCHAIN</p>
+              <p>&gt; BUILT WITH WAGMI + BASE + COINBASE SMART WALLET PROFILES</p>
+              <p>&gt; VIBES STORE 2024 - BRINGING GOOD ONCHAIN VIBES</p>
             </div>
           </footer>
         </div>
