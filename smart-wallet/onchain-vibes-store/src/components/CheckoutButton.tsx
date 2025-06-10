@@ -1,4 +1,3 @@
-
 "use client";
  
 import { ProviderInterface } from "@coinbase/wallet-sdk";
@@ -42,7 +41,10 @@ export default function CheckoutButton() {
  
   // Function to get callback URL - replace in production
   function getCallbackURL() {
-    return "https://your-ngrok-url.ngrok-free.app/api/data-validation";
+    const isProd = import.meta.env.MODE === "production";
+    const prodDomain = import.meta.env.VITE_PROD_DOMAIN;
+    const ngrokUrl = import.meta.env.VITE_NGROK_URL;
+    return isProd ? `${prodDomain}/api/data-validation` : `${ngrokUrl}/api/data-validation`;
   }
  
   // Handle one-click purchase
