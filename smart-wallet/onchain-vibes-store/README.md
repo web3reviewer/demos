@@ -3,14 +3,12 @@
 
 ## Project Overview
 
-**URL**: https://lovable.dev/projects/8ef7b19f-93af-40b3-a5cf-c465fa8bae30
-
-Vibes Store is a demonstration of Coinbase Smart Wallet's profile data collection feature, built as a retro-styled onchain e-commerce platform. This app showcases how to seamlessly collect user profile information (email, physical address) during onchain transactions using Coinbase's Smart Wallet capabilities.
+Vibes Store is a demonstration of Coinbase Smart Wallet's profiles data collection feature, built as a retro-styled onchain e-commerce platform. This app showcases how to seamlessly collect user profile information (email, physical address) during onchain transactions using Smart Wallet capabilities.
 
 ## Features Demonstrated
 
 ### 🔐 Smart Wallet Profiles Integration
-- **Sign In with Smart Wallet**: Users sign in using Coinbase Smart Wallet instead of traditional wallet connection
+- **Sign In with Smart Wallet**: Users sign in using Smart Wallet
 - **Profile Data Collection**: Securely collect email addresses and physical addresses during checkout
 - **Data Validation**: Server-side validation of collected profile data with custom business rules
 - **Seamless UX**: One-click checkout with profile sharing - no forms to fill out
@@ -65,7 +63,7 @@ npm run dev
 
 This app demonstrates the profile data collection feature. To test:
 
-1. **Get a Coinbase Smart Wallet**: Download the Coinbase Wallet app
+1. **Sign up to Smart Wallet**: Sign to a passkey-powered Smart Wallet
 2. **Get Test USDC**: Use a Base Sepolia faucet to get test USDC
 3. **Configure Callback URL**: Update the callback URL in `CheckoutButton.tsx` to your deployed backend
 4. **Test the Flow**: Sign in, select profile data to share, and complete a purchase
@@ -78,21 +76,12 @@ The app includes server-side validation examples:
 - Blocks shipping to certain country codes
 - Demonstrates how to implement custom business rules
 
-## Deployment
-
-Deploy easily with Lovable:
-1. Open your [Lovable project](https://lovable.dev/projects/8ef7b19f-93af-40b3-a5cf-c465fa8bae30)
-2. Click Share → Publish
-3. Your app will be live instantly
-
-For custom domains, navigate to Project > Settings > Domains in Lovable.
 
 ## Learn More
 
 - [Coinbase Smart Wallet Profiles Documentation](https://docs.base.org/identity/smart-wallet/guides/profiles)
-- [Base Blockchain Documentation](https://docs.base.org/)
+- [Base Documentation](https://docs.base.org/)
 - [Wagmi Documentation](https://wagmi.sh/)
-- [Lovable Documentation](https://docs.lovable.dev/)
 
 ## What's Next?
 
@@ -102,7 +91,3 @@ This demo showcases the foundation for building sophisticated onchain commerce e
 - Advanced profile data usage
 - Integration with real payment processing
 - Mobile app version
-
----
-
-Built with ❤️ using Lovable, demonstrating the future of onchain commerce with Smart Wallet profiles.
