@@ -1,4 +1,3 @@
-
 # Vibes Store - Onchain E-commerce with Smart Wallet Profiles
 
 ## Project Overview
@@ -52,10 +51,15 @@ git clone <YOUR_GIT_URL>
 # Step 2: Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install dependencies
+# Step 3: Create a .env file in the project root with the following content:
+VITE_NGROK_URL=https://your-ngrok-url.ngrok-free.app
+VITE_PROD_DOMAIN=https://your-production-domain.com
+# (Replace with your actual ngrok and production URLs)
+
+# Step 4: Install dependencies
 npm i
 
-# Step 4: Start the development server
+# Step 5: Start the development server
 npm run dev
 ```
 
@@ -65,7 +69,7 @@ This app demonstrates the profile data collection feature. To test:
 
 1. **Sign up to Smart Wallet**: Sign to a passkey-powered Smart Wallet
 2. **Get Test USDC**: Use a Base Sepolia faucet to get test USDC
-3. **Configure Callback URL**: Update the callback URL in `CheckoutButton.tsx` to your deployed backend
+3. **Configure Callback URL**: Set your callback URLs in the `.env` file using `VITE_NGROK_URL` and `VITE_PROD_DOMAIN`.
 4. **Test the Flow**: Sign in, select profile data to share, and complete a purchase
 
 ## Data Validation Examples
