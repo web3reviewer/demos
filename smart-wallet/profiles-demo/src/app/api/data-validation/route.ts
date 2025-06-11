@@ -47,9 +47,11 @@ export async function POST(request: Request) {
 
     // If all validations pass, return success
     return Response.json({
-      calls: requestData.calls,
-      chainId: requestData.chainId,
-      capabilities: requestData.capabilities,
+      request: {
+        calls: requestData.calls,
+        chainId: requestData.chainId,
+        capabilities: requestData.capabilities
+      }
     });
   } catch (error) {
     console.error("Error processing data validation:", error);

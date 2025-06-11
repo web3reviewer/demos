@@ -1,11 +1,10 @@
 import { http, cookieStorage, createConfig, createStorage } from "wagmi";
 import { baseSepolia } from "wagmi/chains";
-import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
+import { coinbaseWallet } from "wagmi/connectors";
 
 const cbWalletConnector = coinbaseWallet({
   appName: "Profiles Demo (dev)",
   preference: {
-    keysUrl: "https://keys-dev.coinbase.com/connect",
     options: "smartWalletOnly",
   },
 });
