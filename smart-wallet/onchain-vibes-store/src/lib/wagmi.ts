@@ -4,9 +4,8 @@ import { baseSepolia } from "wagmi/chains";
 import { coinbaseWallet } from "wagmi/connectors";
  
 const cbWalletConnector = coinbaseWallet({
-  appName: "Vibes Store",
+  appName: "Onchain Vibes Store",
   preference: {
-    keysUrl: "https://keys-dev.coinbase.com/connect",
     options: "smartWalletOnly",
   },
 });

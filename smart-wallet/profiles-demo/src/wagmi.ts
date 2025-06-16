@@ -3,7 +3,7 @@ import { baseSepolia } from "wagmi/chains";
 import { coinbaseWallet } from "wagmi/connectors";
 
 const cbWalletConnector = coinbaseWallet({
-  appName: "Profiles Demo (dev)",
+  appName: "Profiles Demo",
   preference: {
     options: "smartWalletOnly",
   },
