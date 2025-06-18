@@ -53,12 +53,11 @@ cd <YOUR_PROJECT_NAME>
 
 # Step 3: Use ngrok to create an https endpoint for local testing
 ngrok http 3000
+```
 
-# Step 4: Create a .env file in the project root with the following content:
-VITE_NGROK_URL=https://your-ngrok-url.ngrok-free.app
-VITE_PROD_DOMAIN=https://your-production-domain.com
+Make sure to update the API link in `CheckoutButton.tsx` with your ngrok link.
 
-
+```sh
 # Step 5: Install dependencies
 npm i
 

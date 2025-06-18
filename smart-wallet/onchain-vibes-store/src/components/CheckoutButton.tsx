@@ -3,11 +3,11 @@
 import { ProviderInterface } from "@coinbase/wallet-sdk";
 import { useEffect, useState } from "react";
 import { encodeFunctionData, erc20Abi, numberToHex, parseUnits } from "viem";
-import { useAccount, useConnect, useDisconnect } from "wagmi";
+import { useConnect } from "wagmi";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Wallet, Zap, Mail, MapPin } from "lucide-react";
+import { Wallet, Mail, MapPin } from "lucide-react";
 
 interface CheckoutResult {
   success: boolean;
@@ -41,10 +41,7 @@ export default function CheckoutButton() {
  
   // Function to get callback URL - replace in production
   function getCallbackURL() {
-    const isProd = import.meta.env.MODE === "production";
-    const prodDomain = import.meta.env.VITE_PROD_DOMAIN;
-    const ngrokUrl = import.meta.env.VITE_NGROK_URL;
-    return isProd ? `${prodDomain}/api/data-validation` : `${ngrokUrl}/api/data-validation`;
+    return "https://your-ngrok-url.ngrok-free.app/api/data-validation"
   }
  
   // Handle one-click purchase
@@ -91,6 +88,7 @@ export default function CheckoutButton() {
           },
         }],
       });
+      console.log("response", response);
  
       // Process response
       if (response?.capabilities?.dataCallback) {
@@ -102,7 +100,7 @@ export default function CheckoutButton() {
  
         // Extract address if provided
         if (data.physicalAddress) {
-          const addr = data.physicalAddress.physicalAddress;
+          const addr = data.physicalAddress;
           result.address = [
             addr.address1,
             addr.address2,
