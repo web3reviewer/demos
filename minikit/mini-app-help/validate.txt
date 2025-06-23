@@ -123,7 +123,27 @@ sendToken({
 **Status:** NOT SUPPORTED IN COINBASE WALLET
 
 ---
+### **8\. Share Extension Context (context.location)**
 
+**Search for:**
+
+javascript
+
+```javascript
+context.location
+context?.location
+sdk.context.location
+context.location.type === 'cast_embed'
+context.location.type === 'cast_share'
+location.type === 'cast_embed'
+location.type === 'cast_share'
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET \- Share links will be dead ends
+
+**WARNING:** Share extension relies on location context which is not available in Coinbase Wallet. Shared links will fail to load the intended content.
+
+---
 ## Output Format
 
 Report ONLY violations found:
