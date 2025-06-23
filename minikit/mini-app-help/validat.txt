@@ -1,0 +1,147 @@
+# Coinbase Wallet Mini App Validation Guide
+
+## Instructions for Code Agents
+
+Scan the entire codebase for the following unsupported features in Coinbase Wallet. Report ONLY the violations found with specific file paths and line numbers.
+
+## Unsupported Features to Flag
+
+### 1\. isInMiniApp Detection
+
+**Search for:**
+
+```javascript
+sdk.isInMiniApp()
+isInMiniApp
+useIsInMiniApp
+```
+
+**Status:** NOT SUPPORTED \- Detection unreliable in Coinbase Wallet
+
+---
+
+### 2\. Haptics API
+
+**Search for:**
+
+```javascript
+sdk.haptics.impactOccurred
+sdk.haptics.notificationOccurred
+sdk.haptics.selectionChanged
+haptics.impactOccurred
+haptics.notificationOccurred
+haptics.selectionChanged
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET
+
+---
+
+### 3\. Warpcast Intent URLs
+
+**Search for:**
+
+```
+farcast.com/~/compose
+warpcast.com/~/compose
+https://farcast.com/~/compose
+https://warpcast.com/~/compose
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET
+
+**FIX:** Replace with:
+
+```javascript
+import { sdk } from '@farcaster/frame-sdk'
+await sdk.actions.composeCast({ text, embeds })
+```
+
+**Docs:** [https://miniapps.farcaster.xyz/docs/sdk/actions/compose-cast](https://miniapps.farcaster.xyz/docs/sdk/actions/compose-cast)
+
+---
+
+### 4\. swapToken Action
+
+**Search for:**
+
+```javascript
+sdk.actions.swapToken
+swapToken({
+.swapToken(
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET
+
+---
+
+### 5\. Direct HTML Anchor Tags
+
+**Search for:**
+
+```html
+<a href=
+<a target=
+<Link href=
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET
+
+**FIX:** Replace with:
+
+```javascript
+import { sdk } from '@farcaster/frame-sdk'
+await sdk.actions.openUrl(url)
+```
+
+---
+
+### 6\. viewToken Action
+
+**Search for:**
+
+```javascript
+sdk.actions.viewToken
+viewToken({
+.viewToken(
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET
+
+---
+
+### 7\. sendToken Action
+
+**Search for:**
+
+```javascript
+sdk.actions.sendToken
+sendToken({
+.sendToken(
+```
+
+**Status:** NOT SUPPORTED IN COINBASE WALLET
+
+---
+
+## Output Format
+
+Report ONLY violations found:
+
+```
+❌ ISSUE: [Feature Name]
+FILE: path/to/file.tsx
+LINE: [line number]
+CODE: [the problematic code snippet]
+```
+
+## Final Summary
+
+After scanning, provide:
+
+1. **Total issues found:** \[number\]  
+2. **Affected files:** \[list\]  
+3. **Action items to fix:**  
+   - List each specific fix needed  
+   - Reference the recommended alternative  
+   - Provide file and line for each fix
