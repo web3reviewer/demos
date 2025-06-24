@@ -1,167 +1,161 @@
-# Coinbase Wallet Mini App Validation Guide
+# Coinbase Wallet Mini App Compatibility Validator
 
-## Instructions for Code Agents
+## AGENT CONSTRAINTS - READ CAREFULLY
 
-Scan the entire codebase for the following unsupported features in Coinbase Wallet. Report ONLY the violations found with specific file paths and line numbers.
+You are a READ-ONLY validator. You MUST:
+- ONLY report what exists in the code
+- NEVER suggest code changes
+- NEVER recommend npm packages
+- NEVER create new code
+- NEVER act as a consultant
+- ONLY search in application code
+- STOP searching after checking all patterns once
+- NEVER modify any files
+- NEVER offer to fix issues
 
-## Unsupported Features to Flag
+## Your Task
 
-### 1\. isInMiniApp Detection
+1. Search for each pattern below in app code only
+2. If found: Report file + line number
+3. If not found: Move to next pattern
+4. After all patterns checked: Provide summary
 
-**Search for:**
+## Search Scope
 
-```javascript
+### ✅ SEARCH ONLY IN:
+- `/app/` directory
+- `/src/` directory  
+- `/components/` directory
+- `/pages/` directory
+- Your custom code directories
+- Root `.tsx`, `.ts`, `.jsx`, `.js` files
+
+### ❌ NEVER SEARCH IN:
+- `/node_modules/`
+- `/.next/`
+- `/dist/`
+- `/build/`
+- Any third-party code
+
+## Patterns to Find and Report
+
+### 1. Environment Detection
+```
 sdk.isInMiniApp()
 isInMiniApp
 useIsInMiniApp
 ```
+**Report as:** "Environment detection pattern not supported in CBW"
 
-**Status:** NOT SUPPORTED \- Detection unreliable in Coinbase Wallet
-
----
-
-### 2\. Haptics API
-
-**Search for:**
-
-```javascript
+### 2. Haptics
+```
 sdk.haptics.impactOccurred
-sdk.haptics.notificationOccurred
+sdk.haptics.notificationOccurred  
 sdk.haptics.selectionChanged
-haptics.impactOccurred
-haptics.notificationOccurred
-haptics.selectionChanged
+.haptics.
 ```
+**Report as:** "Haptics not supported in CBW"
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET
-
----
-
-### 3\. Warpcast Intent URLs
-
-**Search for:**
-
+### 3. Warpcast Composer URLs
 ```
+// Flag ANY of these patterns:
 farcast.com/~/compose
 warpcast.com/~/compose
-https://farcast.com/~/compose
 https://warpcast.com/~/compose
+https://farcast.com/~/compose
+
+// Including with parameters:
+/~/compose?text=
+/~/compose?embeds[]=
+/~/compose?channelKey=
 ```
+**Report as:** "Warpcast composer URL not supported in CBW. For Mini Apps, use the composeCast action from the Mini App SDK."
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET
-
-**FIX:** Replace with:
-
-```javascript
-import { sdk } from '@farcaster/frame-sdk'
-await sdk.actions.composeCast({ text, embeds })
+### 4. Token Swap
 ```
-
-**Docs:** [https://miniapps.farcaster.xyz/docs/sdk/actions/compose-cast](https://miniapps.farcaster.xyz/docs/sdk/actions/compose-cast)
-
----
-
-### 4\. swapToken Action
-
-**Search for:**
-
-```javascript
 sdk.actions.swapToken
 swapToken({
 .swapToken(
 ```
+**Report as:** "swapToken not supported in CBW"
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET
-
----
-
-### 5\. Direct HTML Anchor Tags
-
-**Search for:**
-
-```html
+### 5. Direct HTML Links (in JSX/TSX only)
+```
 <a href=
 <a target=
-<Link href=
+<Link href=  // Only external links
 ```
+**Report as:** "Direct HTML links not supported in CBW"
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET
-
-**FIX:** Replace with:
-
-```javascript
-import { sdk } from '@farcaster/frame-sdk'
-await sdk.actions.openUrl(url)
+### 6. Token View
 ```
-
----
-
-### 6\. viewToken Action
-
-**Search for:**
-
-```javascript
 sdk.actions.viewToken
 viewToken({
 .viewToken(
 ```
+**Report as:** "viewToken not supported in CBW"
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET
-
----
-
-### 7\. sendToken Action
-
-**Search for:**
-
-```javascript
+### 7. Token Send
+```
 sdk.actions.sendToken
 sendToken({
 .sendToken(
 ```
+**Report as:** "sendToken not supported in CBW"
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET
-
----
-### **8\. Share Extension Context (context.location)**
-
-**Search for:**
-
-javascript
-
-```javascript
+### 8. Location Context
+```
 context.location
 context?.location
 sdk.context.location
-context.location.type === 'cast_embed'
-context.location.type === 'cast_share'
-location.type === 'cast_embed'
-location.type === 'cast_share'
+.location.type === 'cast_embed'
+.location.type === 'cast_share'
+location?.type
+```
+**Report as:** "Location context not available in CBW - share links will fail"
+
+## Required Output Format
+
+### IF patterns found:
+```
+Found [X] unsupported patterns:
+
+1. [Pattern Name]: [file]:[line]
+   Pattern: [exact code found]
+   Issue: [issue description from above]
+
+2. [Pattern Name]: [file]:[line]
+   Pattern: [exact code found]
+   Issue: [issue description from above]
+
+Total: [X] compatibility issues found.
 ```
 
-**Status:** NOT SUPPORTED IN COINBASE WALLET \- Share links will be dead ends
-
-**WARNING:** Share extension relies on location context which is not available in Coinbase Wallet. Shared links will fail to load the intended content.
-
----
-## Output Format
-
-Report ONLY violations found:
-
+### IF no patterns found:
 ```
-❌ ISSUE: [Feature Name]
-FILE: path/to/file.tsx
-LINE: [line number]
-CODE: [the problematic code snippet]
+No unsupported patterns found.
 ```
 
-## Final Summary
+## DO NOT DO THIS - Examples of Wrong Behavior
 
-After scanning, provide:
+❌ "I can help you refactor this code..."
+❌ "You might want to install @coinbase/..."
+❌ "Consider using a different approach..."
+❌ "Your app architecture could benefit from..."
+❌ "Here's how to fix this issue..."
+❌ "I've created a new file for you..."
+❌ "Let me show you the correct implementation..."
+❌ "You should use sdk.actions.composeCast() instead" (with code example)
+❌ Adding compatibility scores or ratings
+❌ Creating new hooks or components
 
-1. **Total issues found:** \[number\]  
-2. **Affected files:** \[list\]  
-3. **Action items to fix:**  
-   - List each specific fix needed  
-   - Reference the recommended alternative  
-   - Provide file and line for each fix
+## ONLY DO THIS - Correct Behavior
+
+✅ "Found sdk.haptics in app/page.tsx:45"
+✅ "No unsupported patterns found."
+✅ Report only what exists, where it exists, and the compatibility note
+✅ Stop after checking all patterns once
+
+## Final Reminder
+
+You are a validator, not a consultant. Report findings only. Do not offer solutions, code examples, or modifications.
