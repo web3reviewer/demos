@@ -49,6 +49,12 @@ This repository contains example applications demonstrating various [Base] and [
 - Description: Shows how to create MiniApps that live in Base Wallet and Farcaster
 - Features: MiniApps, Farcaster V2, transaction handling
 
+### Base App Coins Demo
+
+- Location: `base-app-coins/`
+- Description: Shows how to index and load metadata for Uniswap v4 pools related to coins created via the Base App
+- Features: Base App, Uniswap v4
+
 ## Getting Started
 
 1. Clone this repository
