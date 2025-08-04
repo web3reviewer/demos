@@ -1,18 +1,13 @@
 import type { PoolKey } from "@uniswap/v4-sdk";
 import { publicClient } from "./chain";
 import { UniswapV4ABI, UniswapV4PoolManager } from "./univ4";
-import { loadData } from "./utils";
+import { categorizeAppType, loadData } from "./utils";
 import { SqrtPriceMath, TickMath } from "@uniswap/v3-sdk";
 import { formatUnits } from "viem";
 
 
 const START_BLOCK_NUMBER = 32964917n;
 const END_BLOCK_NUMBER = START_BLOCK_NUMBER + 1000n;
-
-const TBA_PAIRINGS = [
-    "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC
-    "0x4200000000000000000000000000000000000006" // WETH
-]
 
 async function main() {
     const logs = await publicClient.getContractEvents({
@@ -40,7 +35,6 @@ async function main() {
         const currency1Price = pool.currency1Price.toSignificant(6);
 
         let coinType: string | undefined;
-        let appType = "ZORA";
         if (key.hooks === "0xd61A675F8a0c67A73DC3B54FB7318B4D91409040") {
             coinType = "ZORA_CREATOR_COIN"
         } else if (key.hooks === "0x9ea932730A7787000042e34390B8E435dD839040") {
@@ -49,9 +43,7 @@ async function main() {
         // if it's not a zora coin, skip
         if (!coinType) continue;
 
-        if (TBA_PAIRINGS.includes(pool.currency0.wrapped.address) || TBA_PAIRINGS.includes(pool.currency1.wrapped.address)) {
-            appType = "TBA"
-        }
+        const appType = await categorizeAppType(pool);
 
         const priceUpper = TickMath.getSqrtRatioAtTick(TickMath.MAX_TICK)
         const priceLower = TickMath.getSqrtRatioAtTick(TickMath.MIN_TICK)
@@ -96,7 +88,5 @@ async function main() {
         console.log(metadata)
     }
 }
-
-
 
 main()
