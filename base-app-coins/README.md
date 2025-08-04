@@ -102,7 +102,6 @@ export async function getCurrency(address: string): Promise<Currency> {
 
 ```typescript
 let coinType: string | undefined;
-let appType = "ZORA";
 if (key.hooks === "0xd61A675F8a0c67A73DC3B54FB7318B4D91409040") {
     coinType = "ZORA_CREATOR_COIN"
 } else if (key.hooks === "0x9ea932730A7787000042e34390B8E435dD839040") {
@@ -111,17 +110,46 @@ if (key.hooks === "0xd61A675F8a0c67A73DC3B54FB7318B4D91409040") {
 
 if (!coinType) continue;
 
-if (TBA_PAIRINGS.includes(pool.currency0.wrapped.address) || TBA_PAIRINGS.includes(pool.currency1.wrapped.address)) {
-    appType = "TBA"
-}
+// Detect if the coin is coming from Base App or Zora
+const appType = await categorizeAppType(pool);
 ```
 
 **Base App Token Detection:**
 ```typescript
-const TBA_PAIRINGS = [
-    "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913", // USDC
-    "0x4200000000000000000000000000000000000006" // WETH
-]
+
+export async function categorizeAppType(pool: Pool) {
+    async function tryGetPlatformReferrer(address: string) {
+        const zoraBaseCoin = getContract({
+            abi: parseAbi([
+                "function platformReferrer() view returns (address)",
+            ]),
+            address: address as `0x${string}`,
+            client: publicClient
+        })
+
+        try {
+            const platformReferrer = await zoraBaseCoin.read.platformReferrer()
+            return platformReferrer
+        } catch (error) {
+            return ADDRESS_ZERO
+        }
+    }
+
+    // Try to fetch `platformReferrer()` on both currencies in the Pool
+    // falling back to ADDRESS_ZERO if the function does not exist (currency is not a Zora coin)
+    const [currency0PlatformReferrer, currency1PlatformReferrer] = await Promise.all([
+        tryGetPlatformReferrer(pool.currency0.wrapped.address),
+        tryGetPlatformReferrer(pool.currency1.wrapped.address)
+    ])
+
+    // If either of the currencies has the Base App referrer address,
+    // the coin is coming from the Base App
+    if ([currency0PlatformReferrer, currency1PlatformReferrer].includes(BASE_PLATFORM_REFERRER)) {
+        return "TBA"
+    }
+
+    return "ZORA"
+}
 ```
 
 #### 4. Liquidity Calculations
@@ -171,13 +199,9 @@ These hooks are deployed by Zora and used to create pools for their token ecosys
 
 ### Base App (TBA) Classification
 
-**Assumption**: Pools paired with specific "blue chip" tokens are likely Base App coins.
+**Detection Method**: Base App coins are identified by their platform referrer address.
 
-Currently identifies Base App coins by checking if either currency in the pool is:
-- USDC: `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`
-- WETH: `0x4200000000000000000000000000000000000006`
-
-**Rationale**: Base App coins often pair with established tokens for liquidity, while pure Zora ecosystem tokens may have different pairing patterns.
+The classification logic checks the platform referrer address associated with the pool to determine if it's a Base App coin versus a pure Zora ecosystem token.
 
 ## Alternative Implementation Approaches
 
@@ -296,9 +320,6 @@ const metadata = {
 
 ### Block Range
 Modify `START_BLOCK_NUMBER` and `END_BLOCK_NUMBER` in `index.ts` to scan different ranges or implement continuous monitoring.
-
-### Token Pairing Rules
-Update `TBA_PAIRINGS` array to modify which base tokens indicate Base App classification.
 
 ### Hook Addresses
 Add new hook addresses to the classification logic as new Zora contracts are deployed.
