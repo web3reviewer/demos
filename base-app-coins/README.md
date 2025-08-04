@@ -199,11 +199,9 @@ These hooks are deployed by Zora and used to create pools for their token ecosys
 
 ### Base App (TBA) Classification
 
-**Detection Method**: Base App coins are identified by their platform referrer address rather than token pairings.
+**Detection Method**: Base App coins are identified by their platform referrer address.
 
 The classification logic checks the platform referrer address associated with the pool to determine if it's a Base App coin versus a pure Zora ecosystem token.
-
-**Rationale**: Platform referrer addresses provide a more reliable method for distinguishing Base App coins from Zora tokens than relying on specific token pairings like USDC/WETH.
 
 ## Alternative Implementation Approaches
 
@@ -322,9 +320,6 @@ const metadata = {
 
 ### Block Range
 Modify `START_BLOCK_NUMBER` and `END_BLOCK_NUMBER` in `index.ts` to scan different ranges or implement continuous monitoring.
-
-### Token Pairing Rules
-Update `TBA_PAIRINGS` array to modify which base tokens indicate Base App classification.
 
 ### Hook Addresses
 Add new hook addresses to the classification logic as new Zora contracts are deployed.
