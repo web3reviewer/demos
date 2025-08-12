@@ -262,7 +262,30 @@ export default function Home() {
                 </div>
               </a>
 
-              {/* Step 5: Base Chain */}
+              {/* Step 5: Zora Protocol */}
+              <a 
+                href="https://docs.zora.co/coins/sdk?utm_source=x&utm_medium=video&utm_campaign=spend-permissions-youssef" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center mb-8 p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 cursor-pointer group"
+              >
+                <div className="flex-shrink-0">
+                  <div className="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg group-hover:bg-purple-700 transition-colors">
+                    🎨
+                  </div>
+                </div>
+                <div className="ml-6 flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 group-hover:text-purple-600">Zora Protocol</h3>
+                  <p className="text-gray-600">Creator coin lookup and trading via Zora's decentralized protocol</p>
+                </div>
+                <div className="hidden md:block">
+                  <svg className="w-8 h-8 text-gray-300 group-hover:text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m0 0l7-7" />
+                  </svg>
+                </div>
+              </a>
+
+              {/* Step 6: Base Chain */}
               <a 
                 href="https://docs.base.org/base-chain/quickstart/why-base?utm_source=x&utm_medium=video&utm_campaign=spend-permissions-youssef" 
                 target="_blank" 
