@@ -5,6 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://base-agent-spend-permissions.vercel.app'),
   title: 'Base Agent Spend Permissions',
   description: 'AI Agent for buying Zora creator coins with secure spend permissions on Base',
   keywords: ['Base', 'AI Agent', 'Zora', 'Creator Coins', 'Spend Permissions', 'Crypto', 'DeFi', 'Web3'],
