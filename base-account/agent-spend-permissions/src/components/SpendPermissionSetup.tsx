@@ -13,7 +13,7 @@ export function SpendPermissionSetup({
   userAddress,
   onPermissionGranted,
 }: SpendPermissionSetupProps) {
-  const [dailyLimit, setDailyLimit] = useState(50);
+  const [dailyLimit, setDailyLimit] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -101,16 +101,16 @@ export function SpendPermissionSetup({
             <input
               type="range"
               id="dailyLimit"
-              min="20"
-              max="100"
+              min="1"
+              max="2"
               value={dailyLimit}
               onChange={(e) => setDailyLimit(Number(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             />
             <div className="flex justify-between text-xs text-gray-500 mt-1">
-              <span>$20</span>
+              <span>$1</span>
               <span className="font-medium text-base-blue">${dailyLimit}</span>
-              <span>$100</span>
+              <span>$2</span>
             </div>
           </div>
         </div>
