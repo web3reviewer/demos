@@ -4,6 +4,7 @@ import {
   fetchPermissions,
   getPermissionStatus,
 } from '@base-org/account/spend-permission'
+import { createBaseAccountSDK } from '@base-org/account'
 
 export interface SpendPermission {
   account: string
@@ -33,6 +34,9 @@ export async function requestUserSpendPermission(
       chainId: 8453, // Base mainnet
       allowance: allowanceUSDC,
       periodInDays: 1, // Daily limit
+      provider: createBaseAccountSDK({
+        appName: "Agent Spend Permissions",
+      }).getProvider(),
     })
 
     return {
@@ -42,7 +46,6 @@ export async function requestUserSpendPermission(
       chainId: 8453,
       allowance: allowanceUSDC,
       periodInDays: 1,
-      signature: permission.signature,
       ...permission
     }
   } catch (error) {
@@ -60,9 +63,12 @@ export async function getUserSpendPermissions(
       account: userAccount as `0x${string}`,
       chainId: 8453,
       spender: spenderAccount as `0x${string}`,
+      provider: createBaseAccountSDK({
+        appName: "Agent Spend Permissions",
+      }).getProvider(),
     })
 
-    return permissions.filter(p => p.token === USDC_BASE_ADDRESS)
+    return permissions.filter(p => p.permission?.token === USDC_BASE_ADDRESS)
   } catch (error) {
     console.error('Failed to fetch spend permissions:', error)
     return []
@@ -75,7 +81,7 @@ export async function checkSpendPermissionStatus(permission: any) {
     return status
   } catch (error) {
     console.error('Failed to check permission status:', error)
-    return { isActive: false, remainingSpend: 0n }
+    return { isActive: false, remainingSpend: BigInt(0) }
   }
 }
 
@@ -87,10 +93,7 @@ export async function prepareSpendTransaction(
     // Convert USD to USDC (6 decimals)
     const amountUSDC = BigInt(Math.floor(amountUSD * 1_000_000))
 
-    const spendCalls = await prepareSpendCallData({
-      permission,
-      amount: amountUSDC,
-    })
+    const spendCalls = await prepareSpendCallData(permission, amountUSDC)
 
     return spendCalls
   } catch (error) {
