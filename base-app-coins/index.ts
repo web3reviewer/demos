@@ -6,15 +6,15 @@ import { SqrtPriceMath, TickMath } from "@uniswap/v3-sdk";
 import { formatUnits } from "viem";
 
 
-const START_BLOCK_NUMBER = 32964917n;
-const END_BLOCK_NUMBER = START_BLOCK_NUMBER + 1000n;
-
 async function main() {
+    const latestBlock = await publicClient.getBlockNumber();
+    const startBlock = latestBlock > 999n ? latestBlock - 999n : 0n;
+
     const logs = await publicClient.getContractEvents({
         abi: UniswapV4ABI,
         address: UniswapV4PoolManager,
-        fromBlock: START_BLOCK_NUMBER,
-        toBlock: END_BLOCK_NUMBER,
+        fromBlock: startBlock,
+        toBlock: latestBlock,
         eventName: "Initialize"
     })
 
@@ -40,8 +40,8 @@ async function main() {
         } else if (key.hooks === "0x9ea932730A7787000042e34390B8E435dD839040") {
             coinType = "ZORA_V4_COIN"
         }
-        // if it's not a zora coin, skip
-        if (!coinType) continue;
+        // Only process ZORA_CREATOR_COIN
+        if (coinType !== "ZORA_CREATOR_COIN") continue;
 
         const appType = await categorizeAppType(pool);
 
