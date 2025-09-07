@@ -1,3 +1,10 @@
 {
-  "/api/profile/route": "app/api/profile/route.js"
+  "/api/coins/last-traded/route": "app/api/coins/last-traded/route.js",
+  "/api/coins/last-traded-unique/route": "app/api/coins/last-traded-unique/route.js",
+  "/api/coins/top-gainers/route": "app/api/coins/top-gainers/route.js",
+  "/api/coins/most-valuable/route": "app/api/coins/most-valuable/route.js",
+  "/api/coins/new/route": "app/api/coins/new/route.js",
+  "/api/coins/top-volume-24h/route": "app/api/coins/top-volume-24h/route.js",
+  "/api/profile/route": "app/api/profile/route.js",
+  "/api/fetch-zora-creator-coins/route": "app/api/fetch-zora-creator-coins/route.js"
 }

@@ -1,0 +1,10 @@
+{
+  "/api/coins/last-traded/route": "/api/coins/last-traded",
+  "/api/coins/last-traded-unique/route": "/api/coins/last-traded-unique",
+  "/api/coins/top-gainers/route": "/api/coins/top-gainers",
+  "/api/coins/most-valuable/route": "/api/coins/most-valuable",
+  "/api/coins/new/route": "/api/coins/new",
+  "/api/coins/top-volume-24h/route": "/api/coins/top-volume-24h",
+  "/api/profile/route": "/api/profile",
+  "/api/fetch-zora-creator-coins/route": "/api/fetch-zora-creator-coins"
+}

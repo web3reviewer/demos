@@ -1,19 +1,60 @@
 {
   "pages": {
-    "/api/fetch-zora-creator-coins/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/fetch-zora-creator-coins/route.js"
+    "/api/coins/last-traded/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/coins/last-traded/route-5c00a1227d9160d3.js"
     ],
-    "/api/profile/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/profile/route.js"
+    "/api/coins/last-traded-unique/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/coins/last-traded-unique/route-5c00a1227d9160d3.js"
+    ],
+    "/api/coins/top-gainers/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/coins/top-gainers/route-5c00a1227d9160d3.js"
+    ],
+    "/api/coins/most-valuable/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/coins/most-valuable/route-5c00a1227d9160d3.js"
     ],
     "/api/coins/new/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/coins/new/route.js"
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/coins/new/route-5c00a1227d9160d3.js"
+    ],
+    "/api/coins/top-volume-24h/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/coins/top-volume-24h/route-5c00a1227d9160d3.js"
+    ],
+    "/api/profile/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/profile/route-5c00a1227d9160d3.js"
+    ],
+    "/api/fetch-zora-creator-coins/route": [
+      "static/chunks/webpack-23055d52f9c766c3.js",
+      "static/chunks/4bd1b696-c023c6e3521b1417.js",
+      "static/chunks/58-1749d8e712449088.js",
+      "static/chunks/main-app-c1532ef50aa77d54.js",
+      "static/chunks/app/api/fetch-zora-creator-coins/route-5c00a1227d9160d3.js"
     ]
   }
 }

@@ -8,11 +8,8 @@ export async function GET(req: NextRequest) {
       return new Response(JSON.stringify({ error: 'Missing ZORA_API_KEY env var' }, null, 2), { status: 500, headers: { 'Content-Type': 'application/json' } });
     }
 
-    const { searchParams } = new URL(req.url);
-    const first = searchParams.get('first');
-    const after = searchParams.get('after');
-
-    const response = await getCoinsTopVolume24h({ first: first ? Number(first) : undefined, after: after || undefined });
+    // getCoinsTopVolume24h currently doesn't accept pagination params in this SDK version
+    const response = await getCoinsTopVolume24h();
 
     return new Response(JSON.stringify(response, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
   } catch (error) {
