@@ -63,9 +63,10 @@ export async function GET(req: NextRequest) {
       if (coinType !== 'ZORA_CREATOR_COIN') continue;
 
       const pool = await loadData(key);
+      const name = pool.currency1.name;
       const symbol = pool.currency1.symbol;
       const address = pool.currency1.wrapped.address;
-      results.push({ symbol, address });
+      results.push({ name, symbol, address });
     }
 
     const payload = {
